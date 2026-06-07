@@ -338,8 +338,3 @@ outer shell that manages the Python process lifecycle.
 
 ---
 
-## Submission Details
-
-- **Email:** Ricardo.castillo@na.firstsource.com
-- **Subject:** `STEM_POC_Leon Franklin_Financial Risk Signal Aggregator`
-- **Deliverables:** Demo link or screen recording (max 3 min) + 5-slide deck + this repo

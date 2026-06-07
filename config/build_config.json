@@ -1,0 +1,15 @@
+{
+  "configured_at": "2026-06-04T15:50:35",
+  "track": "pro-code",
+  "llm_api": {
+    "provider": "gemini",
+    "model": "gemini-1.5-flash",
+    "sdk_install": "pip install google-generativeai",
+    "signup_url": "https://aistudio.google.com",
+    "env_var_name": "GOOGLE_API_KEY",
+    "api_key_placeholder": "YOUR_KEY_HERE"
+  },
+  "viz_framework": "streamlit",
+  "anomaly_detection": "zscore",
+  "anomaly_deps": "scipy"
+}

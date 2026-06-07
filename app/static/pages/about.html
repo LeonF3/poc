@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risk Signal Aggregator — About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700;900&family=Saira:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared tactical design system
+   Firstsource STEM POC · Leon Franklin · 2026
+   ============================================================ */
+
+:root{
+  --bg-page:#0A0A0F;
+  --bg-panel:#0D0D14;
+  --bg-card:#13131E;
+  --bg-item:#16161F;
+  --bg-item-hover:#1E1E2E;
+  --border:#2A2A3A;
+  --purple:#A855F7;
+  --purple-light:#C084FC;
+  --gold:#F59E0B;
+  --text:#E8E3F0;
+  --muted:#7A7A9A;
+  --red:#EF4444;
+  --orange:#F97316;
+  --green:#22C55E;
+
+  --nav-h:56px;
+  --bar-h:36px;
+  --left-w:288px;
+  --right-w:308px;
+
+  --f-disp:"Saira Condensed",system-ui,sans-serif;
+  --f-body:"Saira",system-ui,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg-page);
+  color:var(--text);
+  font-family:var(--f-body);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow:hidden;
+}
+::selection{background:rgba(168,85,247,.35);}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:var(--bg-panel);}
+::-webkit-scrollbar-thumb{background:#22222f;border:1px solid var(--border);}
+::-webkit-scrollbar-thumb:hover{background:#2c2c3d;}
+
+/* ---------- App frame ---------- */
+.app{display:flex;flex-direction:column;height:100vh;width:100vw;background:
+  radial-gradient(1200px 600px at 50% -10%, rgba(168,85,247,.05), transparent 60%),
+  var(--bg-page);}
+.app__body{flex:1;min-height:0;display:flex;}
+
+/* ---------- Top nav ---------- */
+.nav{
+  height:var(--nav-h);flex:0 0 var(--nav-h);
+  display:flex;align-items:center;gap:18px;
+  padding:0 18px;
+  background:linear-gradient(180deg,#10101a,#0c0c12);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:20;
+}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(168,85,247,.4),transparent);}
+.brand{display:flex;align-items:center;gap:11px;min-width:var(--left-w);}
+.brand__mark{
+  width:30px;height:30px;flex:0 0 30px;position:relative;
+  display:grid;place-items:center;
+  background:linear-gradient(160deg,#1c1430,#120c1f);
+  border:1px solid rgba(168,85,247,.5);
+  clip-path:polygon(50% 0,100% 22%,100% 78%,50% 100%,0 78%,0 22%);
+}
+.brand__mark svg{width:15px;height:15px;}
+.brand__txt{display:flex;flex-direction:column;line-height:1;}
+.brand__name{font-family:var(--f-disp);font-weight:900;font-size:.96rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;}
+.brand__sub{font-family:var(--f-mono);font-size:.52rem;letter-spacing:2px;color:var(--muted);margin-top:3px;text-transform:uppercase;}
+
+.tabs{display:flex;gap:4px;flex:1;justify-content:center;}
+.tab{
+  font-family:var(--f-disp);font-weight:700;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  padding:0 16px;height:36px;display:inline-flex;align-items:center;gap:7px;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
+  position:relative;white-space:nowrap;
+}
+.tab:hover{color:var(--text);}
+.tab[aria-current="page"]{color:var(--gold);border-bottom-color:var(--gold);}
+.tab[aria-current="page"]::before{content:"";position:absolute;inset:auto 0 -1px;height:18px;top:auto;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(245,158,11,.18),transparent);pointer-events:none;}
+
+.nav__right{display:flex;align-items:center;gap:18px;min-width:var(--left-w);justify-content:flex-end;}
+.status-dot{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-disp);font-weight:700;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.status-dot i{width:7px;height:7px;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block;animation:pulse 2.4s infinite;}
+.user-chip{display:inline-flex;align-items:center;gap:9px;padding:6px 12px;background:var(--bg-item);border:1px solid var(--border);}
+.user-chip .av{width:22px;height:22px;background:linear-gradient(160deg,var(--purple),#5b2a8c);display:grid;place-items:center;font-family:var(--f-disp);font-weight:900;font-size:.7rem;color:#fff;}
+.user-chip .nm{font-family:var(--f-disp);font-weight:700;font-size:.74rem;letter-spacing:1.5px;text-transform:uppercase;}
+
+/* ---------- Bottom status bar ---------- */
+.statusbar{
+  height:var(--bar-h);flex:0 0 var(--bar-h);
+  display:flex;align-items:center;gap:22px;padding:0 18px;
+  background:linear-gradient(180deg,#0c0c12,#08080c);
+  border-top:1px solid var(--border);font-family:var(--f-mono);
+  font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  position:relative;z-index:20;
+}
+.statusbar .stat{display:inline-flex;align-items:center;gap:8px;}
+.statusbar .stat b{font-family:var(--f-disp);font-weight:900;font-size:.85rem;letter-spacing:1px;}
+.statusbar .stat--red b{color:var(--red);} .statusbar .stat--red .ic{color:var(--red);}
+.statusbar .stat--purple b{color:var(--purple-light);}
+.statusbar .stat--gold b{color:var(--gold);}
+.statusbar .sep{width:1px;height:16px;background:var(--border);}
+.statusbar .spacer{flex:1;}
+.statusbar .range{color:var(--muted);}
+
+/* ---------- Generic atoms ---------- */
+.sec-h{font-family:var(--f-disp);font-weight:700;font-size:.66rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--purple-light);
+  display:flex;align-items:center;gap:9px;}
+.sec-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.sec-h .ic{color:var(--purple);}
+
+.meter{height:7px;background:#1E1E2E;width:100%;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.03);}
+.meter > i{display:block;height:100%;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1);background:currentColor;
+  box-shadow:0 0 10px currentColor;}
+
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;font-family:var(--f-disp);font-weight:700;
+  font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;line-height:1;border:1px solid transparent;white-space:nowrap;}
+.badge--urgent{color:var(--red);background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.35);}
+.badge--review{color:var(--orange);background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.35);}
+.badge--monitor{color:var(--green);background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);}
+
+.tlabel{font-family:var(--f-disp);font-weight:900;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+
+.btn{font-family:var(--f-disp);font-weight:700;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;
+  width:100%;text-align:left;padding:11px 14px;border:1px solid var(--border);background:var(--bg-item);color:var(--text);
+  cursor:pointer;display:flex;align-items:center;gap:9px;transition:background .15s,border-color .15s,color .15s;}
+.btn:hover{background:var(--bg-item-hover);border-color:#3a3a4f;}
+.btn--primary{background:linear-gradient(180deg,var(--purple),#7c3aed);border-color:var(--purple-light);color:#fff;
+  box-shadow:0 0 0 1px rgba(168,85,247,.3),0 8px 24px -12px rgba(168,85,247,.8);}
+.btn--primary:hover{background:linear-gradient(180deg,#b066f9,#8a44f0);}
+.btn .k{margin-left:auto;font-family:var(--f-mono);font-size:.6rem;color:rgba(255,255,255,.6);}
+
+.mono{font-family:var(--f-mono);}
+.muted{color:var(--muted);}
+
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+@keyframes scan{0%{transform:translateY(-100%);}100%{transform:translateY(2000%);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+<style>
+/* ---------- Screen 4: about ---------- */
+.about{flex:1;min-height:0;overflow:auto;background:
+  radial-gradient(900px 500px at 50% -5%,rgba(168,85,247,.07),transparent 60%),var(--bg-page);}
+.about__inner{max-width:800px;margin:0 auto;padding:48px 24px 56px;display:flex;flex-direction:column;gap:22px;}
+.hero{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding-bottom:8px;}
+.hero__mark{width:64px;height:64px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#1c1430,#120c1f);border:1px solid rgba(168,85,247,.5);
+  clip-path:polygon(50% 0,100% 22%,100% 78%,50% 100%,0 78%,0 22%);}
+.hero__mark svg{width:30px;height:30px;}
+.hero h1{font-family:var(--f-disp);font-weight:900;font-size:2.2rem;letter-spacing:3px;text-transform:uppercase;}
+.hero p{font-family:var(--f-mono);font-size:.66rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.hero .ver{display:inline-flex;gap:8px;align-items:center;font-family:var(--f-mono);font-size:.58rem;color:var(--purple-light);
+  border:1px solid rgba(168,85,247,.35);padding:5px 12px;letter-spacing:1.5px;text-transform:uppercase;}
+
+.block{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--bc);padding:18px 20px;display:flex;flex-direction:column;gap:12px;}
+.block h2{font-family:var(--f-disp);font-weight:700;font-size:.78rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--bc);display:flex;align-items:center;gap:9px;}
+.block p{font-size:.92rem;line-height:1.65;color:#cfc8da;text-wrap:pretty;}
+.block b{color:var(--text);font-weight:600;}
+
+.stack{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;background:var(--bg-item);border:1px solid var(--border);
+  font-family:var(--f-disp);font-weight:600;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;}
+.chip .d{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);}
+
+.siggrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sigitem{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg-item);border-left:2px solid var(--red);}
+.sigitem .star{color:var(--gold);font-size:.8rem;}
+.sigitem .nm{font-family:var(--f-disp);font-weight:600;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;}
+.sigitem .full{font-family:var(--f-mono);font-size:.56rem;color:var(--muted);margin-left:auto;}
+
+.about__foot{text-align:center;font-family:var(--f-mono);font-size:.62rem;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;
+  padding-top:8px;border-top:1px solid var(--border);}
+.about__foot b{color:var(--purple-light);}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="app__body" style="flex-direction:column">
+    <main class="about">
+      <div class="about__inner">
+        <header class="hero">
+          <span class="hero__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C084FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/><path d="M12 7.5v5" stroke="#F59E0B"/><circle cx="12" cy="15.8" r=".7" fill="#F59E0B" stroke="#F59E0B"/></svg>
+          </span>
+          <h1>Risk Signal Aggregator</h1>
+          <p>AI-Powered Financial Threat Intelligence · Firstsource STEM POC</p>
+          <span class="ver">● Build 2026.06 · Live Demo</span>
+        </header>
+
+        <section class="block" style="--bc:var(--purple)">
+          <h2><span>▣</span> What It Does</h2>
+          <p>Ingests raw financial transaction data and runs <b>nine rule-based detectors</b> plus <b>Z-score statistical anomaly detection</b> across the full ledger. An AI layer then prioritises every flag, generates a plain-language rationale, assigns a threat score, and issues a mission directive — turning thousands of transactions into a ranked, analyst-ready intelligence queue.</p>
+        </section>
+
+        <section class="block" style="--bc:var(--gold)">
+          <h2><span>⚙</span> Tech Stack</h2>
+          <div class="stack" id="stack"></div>
+        </section>
+
+        <section class="block" style="--bc:var(--red)">
+          <h2><span>⚠</span> Risk Signals</h2>
+          <div class="siggrid" id="siggrid"></div>
+        </section>
+
+        <p class="about__foot">Built by <b>Leon Franklin</b> · Firstsource STEM POC · 2026</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared data model + helpers
+   Demo intelligence dataset. Replace with live detector output.
+   ============================================================ */
+(function (global) {
+  "use strict";
+
+  // ---- Signal taxonomy (10 rule-based detectors) ----
+  var SIGNALS = [
+    { key: "STRUCTURING",   short: "STRUCTURING",   full: "Structuring / Smurfing" },
+    { key: "RAPID",         short: "RAPID FUNDS",   full: "Rapid Fund Movement" },
+    { key: "GEO",           short: "GEO RISK",      full: "Geographic Risk" },
+    { key: "CRYPTO",        short: "CRYPTO+WIRE",   full: "Crypto + Wire Layering" },
+    { key: "ATM",           short: "HIGH-FREQ ATM", full: "High-Frequency ATM" },
+    { key: "DORMANT",       short: "DORMANT",       full: "Dormant Reactivation" },
+    { key: "GAMBLING",      short: "GAMBLING",      full: "Gambling Velocity" },
+    { key: "BIZCASH",       short: "BIZ CASH",      full: "Business Cash Intensity" },
+    { key: "NEGBAL",        short: "NEG BALANCE",   full: "Negative Balance Cycling" },
+    { key: "OUTLIER",       short: "STAT OUTLIER",  full: "Statistical Outlier (Z-Score)" }
+  ];
+
+  // ---- Cases (sorted by score desc → priority rank) ----
+  var CASES = [
+    { name:"James Okafor",      cust:"CUST-1001", signal:"STRUCTURING", score:92,
+      txns:"7 txns · May 8–10 · ATM + Branch",
+      evidence:"Seven cash deposits of $9,400–$9,850 across three branches in 48h, each engineered to sit just below the $10K CTR reporting line.",
+      rationale:"Deposit amounts cluster tightly beneath the reporting threshold with deliberate branch rotation — a textbook structuring pattern intended to evade currency transaction reports.",
+      directive:"Freeze pending review. File SAR within 24h and escalate to BSA officer for manual disposition." },
+
+    { name:"Dmitri Volkov",     cust:"CUST-1014", signal:"RAPID", score:88,
+      txns:"12 txns · May 14–15 · Wire",
+      evidence:"$214K received then forwarded to four downstream accounts within 90 minutes, leaving < $300 residual balance.",
+      rationale:"Funds enter and exit almost instantaneously with negligible retention — classic pass-through layering consistent with a funnel account.",
+      directive:"Hold outbound wires. Map the four beneficiary accounts and request originator KYC from the correspondent bank." },
+
+    { name:"Hannah Goldberg",   cust:"CUST-1009", signal:"CRYPTO", score:84,
+      txns:"9 txns · May 2–19 · Wire + VASP",
+      evidence:"Inbound wires converted to stablecoin at an offshore VASP, then bridged across two chains before re-fiat at a second exchange.",
+      rationale:"Repeated fiat→crypto→fiat conversion through high-risk virtual asset providers obscures the audit trail and breaks the transaction chain.",
+      directive:"Request travel-rule data from both VASPs. Flag wallet clusters and check against OFAC sanctions list." },
+
+    { name:"Amara Diallo",      cust:"CUST-1022", signal:"GEO", score:79,
+      txns:"6 txns · Apr 28–May 12 · Wire",
+      evidence:"Six wires totalling $138K routed to and from two FATF grey-list jurisdictions with no documented commercial relationship.",
+      rationale:"Counterparty geography aligns with elevated-risk corridors and the stated business purpose does not support cross-border activity at this volume.",
+      directive:"Obtain source-of-funds documentation and beneficiary business licences before releasing further transfers." },
+
+    { name:"Mei Lin Chen",      cust:"CUST-1003", signal:"STRUCTURING", score:76,
+      txns:"5 txns · May 6–9 · Branch",
+      evidence:"Five deposits between $8,900 and $9,600 split across two account holders sharing one address.",
+      rationale:"Sub-threshold deposits coordinated across linked parties suggest smurfing to disperse a larger aggregate sum.",
+      directive:"Link related parties under a single case. Review for beneficial-ownership concealment." },
+
+    { name:"Omar Farouk",       cust:"CUST-1031", signal:"CRYPTO", score:73,
+      txns:"8 txns · May 1–17 · VASP",
+      evidence:"Recurring round-dollar purchases of privacy coins followed by immediate withdrawal to unhosted wallets.",
+      rationale:"Privacy-coin exposure paired with self-custody withdrawals removes downstream traceability and elevates layering risk.",
+      directive:"Apply enhanced due diligence. Restrict crypto rail pending source-of-wealth review." },
+
+    { name:"Elena Costa",       cust:"CUST-1018", signal:"GAMBLING", score:71,
+      txns:"21 txns · May 3–20 · Card",
+      evidence:"Rapid deposit/withdraw churn at three online gaming platforms with minimal net wagering activity.",
+      rationale:"High deposit velocity with near-equal withdrawals and low play indicates a gambling account used as a wash conduit.",
+      directive:"Pull platform statements. Verify whether deposits and withdrawals trace to the same instrument." },
+
+    { name:"Sofia Reyes",       cust:"CUST-1007", signal:"RAPID", score:70,
+      txns:"10 txns · May 11–13 · ACH + Wire",
+      evidence:"Payroll-sized inbound ACH consolidated and pushed out via wire within the same business day, repeated thrice.",
+      rationale:"Consistent same-day consolidate-and-forward behaviour is inconsistent with the account's retail profile.",
+      directive:"Review beneficiary relationships and confirm employment / income consistency." },
+
+    { name:"Viktor Petrov",     cust:"CUST-1026", signal:"GEO", score:67,
+      txns:"4 txns · May 5–18 · Wire",
+      evidence:"Two outbound wires to a jurisdiction under heightened monitoring; supporting invoices appear duplicated.",
+      rationale:"Cross-border flow into a watched corridor with weak documentation warrants closer scrutiny but lacks structuring signatures.",
+      directive:"Request original invoices and shipping records to substantiate trade purpose." },
+
+    { name:"Nadia Haddad",      cust:"CUST-1040", signal:"BIZCASH", score:61,
+      txns:"14 txns · May 1–22 · Branch",
+      evidence:"Cash-intensive retail account depositing 3.4× its declared monthly revenue ceiling.",
+      rationale:"Cash volume materially exceeds the modelled business baseline, suggesting commingling of unreported funds.",
+      directive:"Reconcile deposits against POS settlement records and revisit expected-activity profile." },
+
+    { name:"Priya Nair",        cust:"CUST-1012", signal:"ATM", score:58,
+      txns:"19 txns · May 9–16 · ATM",
+      evidence:"Nineteen ATM withdrawals across nine machines in two cities within a single week.",
+      rationale:"Geographic dispersion and frequency of cash-out activity exceed normal personal usage patterns.",
+      directive:"Confirm card-present geography against customer travel and check for card-sharing." },
+
+    { name:"Kwame Mensah",      cust:"CUST-1035", signal:"GAMBLING", score:54,
+      txns:"11 txns · May 4–19 · Card",
+      evidence:"Sustained gaming deposits funded by cash advances rather than earned income.",
+      rationale:"Credit-funded gambling velocity raises both AML and credit-risk flags but stays below acute thresholds.",
+      directive:"Monitor for 30 days. Re-score if deposit cadence accelerates." },
+
+    { name:"Tomás Ribeiro",     cust:"CUST-1048", signal:"BIZCASH", score:51,
+      txns:"9 txns · May 2–21 · Branch",
+      evidence:"Even-dollar cash deposits inconsistent with the variable receipts expected for the stated trade.",
+      rationale:"Round-number cash entries deviate from organic sales distribution, a soft indicator of fabricated revenue.",
+      directive:"Sample-audit recent deposits against till records." },
+
+    { name:"Lucas Moreau",      cust:"CUST-1029", signal:"DORMANT", score:48,
+      txns:"5 txns · May 15–22 · Wire",
+      evidence:"Account dormant 19 months suddenly reactivated with a $46K inbound wire and partial onward transfer.",
+      rationale:"Reactivation of a long-idle account immediately ahead of large movement is a recognised mule indicator.",
+      directive:"Re-verify identity and contact customer to confirm intent before clearing." },
+
+    { name:"Fatima Zahra",      cust:"CUST-1052", signal:"OUTLIER", score:46,
+      txns:"3 txns · May 17 · Wire",
+      evidence:"Single transaction 4.1σ above the customer's 12-month spend distribution.",
+      rationale:"Statistical outlier flagged by the Z-score detector; magnitude is anomalous but explainable by a one-off purchase.",
+      directive:"Request context for the transaction; close if a legitimate large purchase is confirmed." },
+
+    { name:"Yuki Tanaka",       cust:"CUST-1044", signal:"BIZCASH", score:43,
+      txns:"7 txns · May 6–20 · Branch",
+      evidence:"Cash deposits trending 1.6× above seasonal baseline for the merchant category.",
+      rationale:"Mild elevation above expected activity; within tolerance but worth passive monitoring.",
+      directive:"No action. Keep on watch list and re-evaluate next cycle." },
+
+    { name:"Isabella Romano",   cust:"CUST-1016", signal:"NEGBAL", score:41,
+      txns:"8 txns · May 1–18 · ACH",
+      evidence:"Repeated overdraft-then-cover cycles using a second linked account.",
+      rationale:"Negative-balance cycling can mask float manipulation but the amounts here are small and consistent.",
+      directive:"Monitor. Flag if cycle frequency increases or amounts escalate." },
+
+    { name:"Daniel Cohen",      cust:"CUST-1057", signal:"OUTLIER", score:39,
+      txns:"2 txns · May 13 · Card",
+      evidence:"Spend 3.2σ from baseline on a single merchant.",
+      rationale:"Moderate statistical deviation with low corroborating risk indicators.",
+      directive:"Passive monitoring only." },
+
+    { name:"Mohammed Al-Rashid",cust:"CUST-1021", signal:"NEGBAL", score:37,
+      txns:"6 txns · May 3–17 · ACH",
+      evidence:"Frequent small overdrafts cleared within hours by inbound transfers.",
+      rationale:"Pattern consistent with tight cash management rather than evasion.",
+      directive:"No action required at this time." },
+
+    { name:"Grace Okonkwo",     cust:"CUST-1033", signal:"NEGBAL", score:35,
+      txns:"5 txns · May 7–19 · ACH",
+      evidence:"Two overdraft events within the review window, both promptly covered.",
+      rationale:"Low-severity balance cycling, no structuring or velocity flags attached.",
+      directive:"Watch list." },
+
+    { name:"Olga Sokolova",     cust:"CUST-1061", signal:"OUTLIER", score:33,
+      txns:"2 txns · May 9 · Wire",
+      evidence:"Transaction 2.8σ above baseline; counterparty is a known utility provider.",
+      rationale:"Outlier explained by an annual bill; minimal residual concern.",
+      directive:"Auto-clear candidate." },
+
+    { name:"Sergei Ivanov",     cust:"CUST-1024", signal:"NEGBAL", score:31,
+      txns:"4 txns · May 5–16 · ACH",
+      evidence:"Single overdraft cleared next business day.",
+      rationale:"Routine balance fluctuation below any meaningful risk floor.",
+      directive:"No action." },
+
+    { name:"Carmen Vega",       cust:"CUST-1038", signal:"NEGBAL", score:28,
+      txns:"3 txns · May 11 · ACH",
+      evidence:"Brief negative balance from a timing mismatch on payroll deposit.",
+      rationale:"Benign timing artefact, not indicative of manipulation.",
+      directive:"No action." },
+
+    { name:"Chidi Eze",         cust:"CUST-1066", signal:"OUTLIER", score:26,
+      txns:"1 txn · May 14 · Card",
+      evidence:"Spend 2.4σ above baseline at a travel merchant.",
+      rationale:"Low-confidence outlier; consistent with seasonal travel.",
+      directive:"Auto-clear candidate." },
+
+    { name:"Aisha Bello",       cust:"CUST-1042", signal:"NEGBAL", score:23,
+      txns:"2 txns · May 6 · ACH",
+      evidence:"One overdraft cleared within the hour.",
+      rationale:"Negligible risk; included for completeness.",
+      directive:"No action." },
+
+    { name:"Ravi Kapoor",       cust:"CUST-1050", signal:"NEGBAL", score:19,
+      txns:"2 txns · May 12 · ACH",
+      evidence:"Minor overdraft auto-covered by overdraft protection.",
+      rationale:"System-managed event, no behavioural concern.",
+      directive:"No action." },
+
+    { name:"Marco Bianchi",     cust:"CUST-1059", signal:"NEGBAL", score:15,
+      txns:"1 txn · May 10 · ACH",
+      evidence:"Single low-value overdraft.",
+      rationale:"Lowest-priority flag in the queue; no corroborating signals.",
+      directive:"No action." }
+  ];
+
+  // ---- Derivation helpers ----
+  function level(score){
+    if (score >= 90) return { key:"CRITICAL", label:"CRITICAL", color:"var(--red)",    hex:"#EF4444", glyph:"☠" };
+    if (score >= 70) return { key:"THREAT",   label:"THREAT",   color:"var(--orange)", hex:"#F97316", glyph:"✖" };
+    if (score >= 45) return { key:"CAUTION",  label:"CAUTION",  color:"var(--gold)",   hex:"#F59E0B", glyph:"▲" };
+    return                   { key:"MONITOR", label:"MONITOR",  color:"var(--green)",  hex:"#22C55E", glyph:"●" };
+  }
+  function mission(score){
+    if (score >= 70) return { key:"URGENT",  cls:"urgent",  glyph:"⚡", text:"IMMEDIATE ACTION", color:"var(--red)",    hex:"#EF4444", bg:"#2D0A0A" };
+    if (score >= 45) return { key:"REVIEW",  cls:"review",  glyph:"🔍", text:"INVESTIGATE",      color:"var(--orange)", hex:"#F97316", bg:"#2D1A0A" };
+    return                   { key:"MONITOR", cls:"monitor", glyph:"👁", text:"WATCH LIST",       color:"var(--green)",  hex:"#22C55E", bg:"#0A2D0A" };
+  }
+  function signalOf(key){ for (var i=0;i<SIGNALS.length;i++) if (SIGNALS[i].key===key) return SIGNALS[i]; return {short:key,full:key,key:key}; }
+
+  // Attach rank + derived fields, ensure sorted desc.
+  CASES.sort(function(a,b){ return b.score - a.score; });
+  CASES.forEach(function(c,i){
+    c.rank = i + 1;
+    c.id = "#" + String(i + 1).padStart(3, "0");
+    c.level = level(c.score);
+    c.mission = mission(c.score);
+    c.sig = signalOf(c.signal);
+  });
+
+  // Per-signal counts (taxonomy order).
+  var SIGNAL_COUNTS = SIGNALS.map(function (s) {
+    return { signal: s, count: CASES.filter(function (c) { return c.signal === s.key; }).length };
+  });
+
+  var STATS = {
+    total: CASES.length,
+    immediate: CASES.filter(function (c) { return c.score >= 45; }).length, // URGENT + REVIEW
+    flagged:   CASES.filter(function (c) { return c.score >= 70; }).length, // suspects flagged
+    high:      CASES.filter(function (c) { return c.score >= 70; }).length,
+    medium:    CASES.filter(function (c) { return c.score >= 45 && c.score < 70; }).length,
+    low:       CASES.filter(function (c) { return c.score < 45; }).length,
+    txnLoaded: 500,
+    rangeStart: "2026-03-06",
+    rangeEnd:   "2026-06-04"
+  };
+
+  global.RSA = {
+    SIGNALS: SIGNALS, CASES: CASES, SIGNAL_COUNTS: SIGNAL_COUNTS, STATS: STATS,
+    level: level, mission: mission, signalOf: signalOf,
+    analyst: "LEON FRANKLIN"
+  };
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared chrome (nav + status bar)
+   ============================================================ */
+(function (global) {
+  "use strict";
+  var R = global.RSA;
+
+  var SHIELD =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#C084FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/><path d="M12 8v4" stroke="#F59E0B"/><circle cx="12" cy="15.5" r=".6" fill="#F59E0B" stroke="#F59E0B"/></svg>';
+
+  var TABS = [
+    { id:"upload",   label:"Upload",    href:"http://localhost:8507/app/static/pages/upload.html" },
+    { id:"cases",    label:"Case Files",href:"http://localhost:8507/app/static/pages/case_files.html" },
+    { id:"intel",    label:"Intel Map", href:"http://localhost:8507/app/static/pages/intel_map.html" },
+    { id:"about",    label:"About",     href:"http://localhost:8507/app/static/pages/about.html" }
+  ];
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); }
+
+  function renderNav(active){
+    var tabs = TABS.map(function(t){
+      var cur = t.id === active ? ' aria-current="page"' : "";
+      return '<a class="tab" href="'+t.href+'"'+cur+'>'+t.label.toUpperCase()+'</a>';
+    }).join("");
+    var initials = R.analyst.split(" ").map(function(w){return w[0];}).join("").slice(0,2);
+    return ''+
+    '<header class="nav">'+
+      '<div class="brand">'+
+        '<span class="brand__mark">'+SHIELD+'</span>'+
+        '<span class="brand__txt">'+
+          '<span class="brand__name">Risk Signal Aggregator</span>'+
+          '<span class="brand__sub">Financial Threat Intelligence</span>'+
+        '</span>'+
+      '</div>'+
+      '<nav class="tabs">'+tabs+'</nav>'+
+      '<div class="nav__right">'+
+        '<span class="status-dot"><i></i> System Online</span>'+
+        '<span class="user-chip"><span class="av">'+esc(initials)+'</span><span class="nm">'+esc(R.analyst)+'</span></span>'+
+      '</div>'+
+    '</header>';
+  }
+
+  function renderStatusbar(){
+    var s = R.STATS;
+    return ''+
+    '<footer class="statusbar">'+
+      '<span class="stat stat--red"><span class="ic">⚡</span> <b>'+s.immediate+'</b> Immediate Action</span>'+
+      '<span class="sep"></span>'+
+      '<span class="stat stat--purple"><b>'+s.flagged+'</b> Suspects Flagged</span>'+
+      '<span class="sep"></span>'+
+      '<span class="stat stat--gold"><b>'+s.total+'</b> Total Threats</span>'+
+      '<span class="spacer"></span>'+
+      '<span class="range">Window '+s.rangeStart+' &nbsp;–&nbsp; '+s.rangeEnd+'</span>'+
+    '</footer>';
+  }
+
+  // width helper for meters (clamped)
+  function pct(score){ return Math.max(3, Math.min(100, score)); }
+
+  R.ui = { renderNav:renderNav, renderStatusbar:renderStatusbar, esc:esc, pct:pct, SHIELD:SHIELD, TABS:TABS };
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>
+(function(){
+  var R = window.RSA, ui = R.ui, esc = ui.esc;
+  document.querySelector(".app").insertAdjacentHTML("afterbegin", ui.renderNav("about"));
+  document.querySelector(".app").insertAdjacentHTML("beforeend", ui.renderStatusbar());
+
+  var STACK = [
+    { nm:"Python",    d:"core" },
+    { nm:"Grok",      d:"Groq · LLM" },
+    { nm:"Gemini",    d:"reasoning" },
+    { nm:"Streamlit", d:"UI" },
+    { nm:"Pandas",    d:"ingest" },
+    { nm:"NumPy",     d:"z-score" }
+  ];
+  document.getElementById("stack").innerHTML = STACK.map(function(s){
+    return '<span class="chip">'+esc(s.nm)+' <span class="d">'+esc(s.d)+'</span></span>';
+  }).join("");
+
+  document.getElementById("siggrid").innerHTML = R.SIGNALS.map(function(s){
+    return '<div class="sigitem"><span class="star">✦</span><span class="nm">'+esc(s.short)+'</span><span class="full">'+esc(s.full)+'</span></div>';
+  }).join("");
+})();
+</script>
+</body>
+</html>

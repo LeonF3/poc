@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risk Signal Aggregator — Upload</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700;900&family=Saira:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared tactical design system
+   Firstsource STEM POC · Leon Franklin · 2026
+   ============================================================ */
+
+:root{
+  --bg-page:#0A0A0F;
+  --bg-panel:#0D0D14;
+  --bg-card:#13131E;
+  --bg-item:#16161F;
+  --bg-item-hover:#1E1E2E;
+  --border:#2A2A3A;
+  --purple:#A855F7;
+  --purple-light:#C084FC;
+  --gold:#F59E0B;
+  --text:#E8E3F0;
+  --muted:#7A7A9A;
+  --red:#EF4444;
+  --orange:#F97316;
+  --green:#22C55E;
+
+  --nav-h:56px;
+  --bar-h:36px;
+  --left-w:288px;
+  --right-w:308px;
+
+  --f-disp:"Saira Condensed",system-ui,sans-serif;
+  --f-body:"Saira",system-ui,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg-page);
+  color:var(--text);
+  font-family:var(--f-body);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow:hidden;
+}
+::selection{background:rgba(168,85,247,.35);}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:var(--bg-panel);}
+::-webkit-scrollbar-thumb{background:#22222f;border:1px solid var(--border);}
+::-webkit-scrollbar-thumb:hover{background:#2c2c3d;}
+
+/* ---------- App frame ---------- */
+.app{display:flex;flex-direction:column;height:100vh;width:100vw;background:
+  radial-gradient(1200px 600px at 50% -10%, rgba(168,85,247,.05), transparent 60%),
+  var(--bg-page);}
+.app__body{flex:1;min-height:0;display:flex;}
+
+/* ---------- Top nav ---------- */
+.nav{
+  height:var(--nav-h);flex:0 0 var(--nav-h);
+  display:flex;align-items:center;gap:18px;
+  padding:0 18px;
+  background:linear-gradient(180deg,#10101a,#0c0c12);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:20;
+}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(168,85,247,.4),transparent);}
+.brand{display:flex;align-items:center;gap:11px;min-width:var(--left-w);}
+.brand__mark{
+  width:30px;height:30px;flex:0 0 30px;position:relative;
+  display:grid;place-items:center;
+  background:linear-gradient(160deg,#1c1430,#120c1f);
+  border:1px solid rgba(168,85,247,.5);
+  clip-path:polygon(50% 0,100% 22%,100% 78%,50% 100%,0 78%,0 22%);
+}
+.brand__mark svg{width:15px;height:15px;}
+.brand__txt{display:flex;flex-direction:column;line-height:1;}
+.brand__name{font-family:var(--f-disp);font-weight:900;font-size:.96rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;}
+.brand__sub{font-family:var(--f-mono);font-size:.52rem;letter-spacing:2px;color:var(--muted);margin-top:3px;text-transform:uppercase;}
+
+.tabs{display:flex;gap:4px;flex:1;justify-content:center;}
+.tab{
+  font-family:var(--f-disp);font-weight:700;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  padding:0 16px;height:36px;display:inline-flex;align-items:center;gap:7px;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
+  position:relative;white-space:nowrap;
+}
+.tab:hover{color:var(--text);}
+.tab[aria-current="page"]{color:var(--gold);border-bottom-color:var(--gold);}
+.tab[aria-current="page"]::before{content:"";position:absolute;inset:auto 0 -1px;height:18px;top:auto;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(245,158,11,.18),transparent);pointer-events:none;}
+
+.nav__right{display:flex;align-items:center;gap:18px;min-width:var(--left-w);justify-content:flex-end;}
+.status-dot{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-disp);font-weight:700;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.status-dot i{width:7px;height:7px;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block;animation:pulse 2.4s infinite;}
+.user-chip{display:inline-flex;align-items:center;gap:9px;padding:6px 12px;background:var(--bg-item);border:1px solid var(--border);}
+.user-chip .av{width:22px;height:22px;background:linear-gradient(160deg,var(--purple),#5b2a8c);display:grid;place-items:center;font-family:var(--f-disp);font-weight:900;font-size:.7rem;color:#fff;}
+.user-chip .nm{font-family:var(--f-disp);font-weight:700;font-size:.74rem;letter-spacing:1.5px;text-transform:uppercase;}
+
+/* ---------- Bottom status bar ---------- */
+.statusbar{
+  height:var(--bar-h);flex:0 0 var(--bar-h);
+  display:flex;align-items:center;gap:22px;padding:0 18px;
+  background:linear-gradient(180deg,#0c0c12,#08080c);
+  border-top:1px solid var(--border);font-family:var(--f-mono);
+  font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  position:relative;z-index:20;
+}
+.statusbar .stat{display:inline-flex;align-items:center;gap:8px;}
+.statusbar .stat b{font-family:var(--f-disp);font-weight:900;font-size:.85rem;letter-spacing:1px;}
+.statusbar .stat--red b{color:var(--red);} .statusbar .stat--red .ic{color:var(--red);}
+.statusbar .stat--purple b{color:var(--purple-light);}
+.statusbar .stat--gold b{color:var(--gold);}
+.statusbar .sep{width:1px;height:16px;background:var(--border);}
+.statusbar .spacer{flex:1;}
+.statusbar .range{color:var(--muted);}
+
+/* ---------- Generic atoms ---------- */
+.sec-h{font-family:var(--f-disp);font-weight:700;font-size:.66rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--purple-light);
+  display:flex;align-items:center;gap:9px;}
+.sec-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.sec-h .ic{color:var(--purple);}
+
+.meter{height:7px;background:#1E1E2E;width:100%;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.03);}
+.meter > i{display:block;height:100%;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1);background:currentColor;
+  box-shadow:0 0 10px currentColor;}
+
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;font-family:var(--f-disp);font-weight:700;
+  font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;line-height:1;border:1px solid transparent;white-space:nowrap;}
+.badge--urgent{color:var(--red);background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.35);}
+.badge--review{color:var(--orange);background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.35);}
+.badge--monitor{color:var(--green);background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);}
+
+.tlabel{font-family:var(--f-disp);font-weight:900;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+
+.btn{font-family:var(--f-disp);font-weight:700;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;
+  width:100%;text-align:left;padding:11px 14px;border:1px solid var(--border);background:var(--bg-item);color:var(--text);
+  cursor:pointer;display:flex;align-items:center;gap:9px;transition:background .15s,border-color .15s,color .15s;}
+.btn:hover{background:var(--bg-item-hover);border-color:#3a3a4f;}
+.btn--primary{background:linear-gradient(180deg,var(--purple),#7c3aed);border-color:var(--purple-light);color:#fff;
+  box-shadow:0 0 0 1px rgba(168,85,247,.3),0 8px 24px -12px rgba(168,85,247,.8);}
+.btn--primary:hover{background:linear-gradient(180deg,#b066f9,#8a44f0);}
+.btn .k{margin-left:auto;font-family:var(--f-mono);font-size:.6rem;color:rgba(255,255,255,.6);}
+
+.mono{font-family:var(--f-mono);}
+.muted{color:var(--muted);}
+
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+@keyframes scan{0%{transform:translateY(-100%);}100%{transform:translateY(2000%);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+<style>
+/* ---------- Screen 1: dashboard layout ---------- */
+.dash{flex:1;min-height:0;display:grid;grid-template-columns:var(--left-w) 1fr var(--right-w);}
+.panel{min-height:0;overflow:auto;background:var(--bg-panel);display:flex;flex-direction:column;}
+.panel--l{border-right:1px solid var(--border);padding:18px 16px;gap:20px;}
+.panel--r{border-left:1px solid var(--border);padding:18px 16px;gap:18px;}
+
+/* Upload box */
+.uploadbox{border:1.5px dashed rgba(168,85,247,.55);background:linear-gradient(180deg,#15101f,#100c19);
+  padding:22px 14px;text-align:center;cursor:pointer;transition:background .15s,border-color .15s;}
+.uploadbox:hover{background:#181225;border-color:var(--purple-light);}
+.uploadbox .ic{font-size:1.5rem;}
+.uploadbox .t{font-family:var(--f-disp);font-weight:700;font-size:.82rem;letter-spacing:1.5px;text-transform:uppercase;margin-top:8px;}
+.uploadbox .s{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);margin-top:5px;letter-spacing:1px;}
+.col{display:flex;flex-direction:column;gap:8px;}
+.col--tight{gap:2px;}
+
+/* Signal list */
+.sig{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--bg-item);
+  border-left:3px solid var(--border);cursor:default;transition:background .15s;}
+.sig:hover{background:var(--bg-item-hover);}
+.sig--hit{border-left-color:var(--gold);}
+.sig .chev{font-family:var(--f-mono);color:var(--muted);font-size:.72rem;}
+.sig .nm{font-family:var(--f-disp);font-weight:600;font-size:.78rem;letter-spacing:1.2px;text-transform:uppercase;flex:1;color:#b9b4c6;}
+.sig--hit .nm{color:var(--text);}
+.sig .ct{font-family:var(--f-disp);font-weight:900;font-size:.86rem;min-width:22px;text-align:right;color:var(--muted);}
+.sig--hit .ct{color:var(--purple-light);}
+
+.panel-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px;}
+.loaded{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.62rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+.loaded i{width:7px;height:7px;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.4s infinite;}
+.powered{font-family:var(--f-mono);font-size:.56rem;letter-spacing:1.5px;color:#4a4a63;text-transform:uppercase;}
+
+/* Center stage */
+.stage{position:relative;min-height:0;overflow:hidden;background:#05050a;}
+.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;}
+.stage__grade{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(90deg,var(--bg-panel) 0%,rgba(13,13,20,.35) 14%,transparent 32%,transparent 68%,rgba(13,13,20,.35) 86%,var(--bg-panel) 100%),
+  linear-gradient(0deg,var(--bg-page) 0%,rgba(10,10,15,.4) 16%,transparent 38%),
+  radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(5,5,10,.55) 100%);}
+.stage__scan{position:absolute;left:0;right:0;height:90px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(168,85,247,.05) 45%,rgba(192,132,252,.09) 50%,rgba(168,85,247,.05) 55%,transparent);
+  animation:scan 7s linear infinite;mix-blend-mode:screen;}
+.stage__badge{position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:9px;padding:8px 16px;
+  background:rgba(60,30,95,.55);border:1px solid rgba(168,85,247,.5);backdrop-filter:blur(6px);}
+.stage__badge .sh{width:14px;height:14px;}
+.stage__badge .rank{font-family:var(--f-disp);font-weight:900;font-size:.8rem;color:var(--gold);letter-spacing:1px;}
+.stage__badge .nm{font-family:var(--f-disp);font-weight:700;font-size:.82rem;letter-spacing:2.5px;text-transform:uppercase;}
+.stage__status{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);text-align:center;}
+.stage__status .ln{font-family:var(--f-disp);font-weight:700;font-size:.95rem;letter-spacing:3px;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:10px;}
+.stage__status.awaiting .ln{color:var(--gold);animation:pulse 1.8s infinite;}
+.stage__status.complete .ln{color:var(--green);}
+.stage__status .sub{font-family:var(--f-mono);font-size:.6rem;letter-spacing:2px;color:var(--muted);margin-top:7px;text-transform:uppercase;}
+.stage__corner{position:absolute;font-family:var(--f-mono);font-size:.56rem;letter-spacing:2px;color:rgba(232,227,240,.4);text-transform:uppercase;}
+.stage__corner--tl{top:16px;left:18px;} .stage__corner--tr{top:16px;right:18px;}
+.stage__recticle{position:absolute;top:16px;right:18px;display:flex;align-items:center;gap:8px;}
+.stage__recticle i{width:6px;height:6px;background:var(--red);box-shadow:0 0 8px var(--red);animation:blink 1.2s infinite;}
+
+/* Right: active threats */
+.rtotal{display:flex;align-items:baseline;gap:8px;}
+.rtotal b{font-family:var(--f-disp);font-weight:900;font-size:2.4rem;line-height:.9;color:var(--text);}
+.rtotal span{font-family:var(--f-disp);font-weight:700;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+
+.tcard{background:var(--bg-item);border-left:3px solid var(--c);padding:11px 12px;display:flex;flex-direction:column;gap:7px;
+  cursor:pointer;transition:background .15s,transform .15s;}
+.tcard:hover{background:var(--bg-item-hover);transform:translateX(2px);}
+.tcard__top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.tcard__sig{font-family:var(--f-disp);font-weight:700;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);}
+.tcard__id{font-family:var(--f-mono);font-size:.58rem;color:var(--muted);}
+.tcard__nm{font-family:var(--f-disp);font-weight:600;font-size:.92rem;letter-spacing:.5px;}
+.tcard__meter{display:flex;align-items:center;gap:9px;}
+.tcard__meter .meter{color:var(--c);flex:1;}
+.tcard__sc{font-family:var(--f-disp);font-weight:900;font-size:.82rem;color:var(--c);min-width:46px;text-align:right;}
+.tcard__sc small{color:var(--muted);font-weight:600;font-size:.62rem;}
+
+.priority{background:var(--bg-card);border-top:3px solid var(--c);padding:14px;display:flex;flex-direction:column;gap:10px;}
+.priority__hd{display:flex;align-items:center;justify-content:space-between;}
+.priority__nm{font-family:var(--f-disp);font-weight:700;font-size:1rem;letter-spacing:.5px;}
+.priority__id{font-family:var(--f-mono);font-size:.58rem;color:var(--muted);}
+.priority__why{font-style:italic;font-size:.8rem;line-height:1.55;color:#cfc8da;border-left:2px solid var(--purple);padding-left:11px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.priority .badge{width:100%;justify-content:center;padding:9px;}
+.priority__meta{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.56rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+
+.scanning .tcard__meter .meter > i{animation:none;}
+
+/* Signal type dropdown names */
+.sig-names{display:flex;flex-direction:column;gap:1px;margin-bottom:2px;}
+.sig-name{
+  font-family:var(--f-body);font-size:.72rem;color:var(--text);
+  padding:5px 12px 5px 26px;cursor:pointer;
+  background:var(--bg-item);border-left:2px solid var(--purple);
+  transition:background .12s,color .12s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sig-name:hover{background:var(--bg-item-hover);color:var(--purple-light);}
+.sig--open .chev{color:var(--purple-light);}
+</style>
+</head>
+<body>
+<div class="app">
+  <!--__NAV__-->
+  <div class="app__body">
+    <main class="dash">
+
+      <!-- LEFT -->
+      <section class="panel panel--l">
+        <div class="col">
+          <h2 class="sec-h"><span class="ic">▣</span> Command Center</h2>
+          <div class="col" style="margin-top:4px">
+            <span class="sec-h" style="color:var(--muted);font-size:.6rem">📁 Intel File</span>
+            <label class="uploadbox" id="drop">
+              <div class="ic">⬆</div>
+              <div class="t">Drop Intel File</div>
+              <div class="s">.csv · .xlsx · max 50MB</div>
+              <input type="file" hidden>
+            </label>
+            <button class="btn" id="sample"><span>◧</span> Load Sample <span class="k">500 txn</span></button>
+            <button class="btn btn--primary" id="initiate"><span>▶</span> Initiate Analysis</button>
+          </div>
+        </div>
+
+        <div class="col col--tight">
+          <h2 class="sec-h"><span class="ic">⚿</span> Signal Types</h2>
+          <div class="col col--tight" id="siglist"></div>
+        </div>
+
+        <div class="panel-foot">
+          <span class="loaded"><i></i> 500 TXN Loaded · 6 Detectors</span>
+          <span class="powered">Rule Engine + Z-Score · Powered by Grok</span>
+        </div>
+      </section>
+
+      <!-- CENTER -->
+      <section class="stage" id="stage">
+        <video src="threat.mp4" autoplay muted loop playsinline></video>
+        <div class="stage__grade"></div>
+        <div class="stage__scan"></div>
+        <span class="stage__corner stage__corner--tl">SECTOR · NA-EAST · LIVE FEED</span>
+        <span class="stage__recticle"><i></i><span class="stage__corner" style="position:static">REC</span></span>
+        <div class="stage__badge">
+          <svg class="sh" viewBox="0 0 24 24" fill="none" stroke="#C084FC" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/></svg>
+          <span class="rank">155</span><span class="nm">Leon Franklin</span>
+        </div>
+        <div class="stage__status awaiting" id="status">
+          <div class="ln"><span id="statusGlyph">⏳</span> <span id="statusText">Awaiting Intel</span></div>
+          <div class="sub" id="statusSub">Press Initiate Analysis to run all detectors</div>
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="panel panel--r">
+        <div class="col">
+          <h2 class="sec-h"><span class="ic">⚠</span> Active Threats</h2>
+          <div class="rtotal"><b id="rtotal">27</b><span>Total Signals<br>In Queue</span></div>
+        </div>
+        <div class="col" id="threatcards"></div>
+        <div class="col">
+          <h2 class="sec-h"><span class="ic">★</span> Top Priority Case</h2>
+          <div id="priority"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <!--__STATUSBAR__-->
+</div>
+
+<script>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared data model + helpers
+   Demo intelligence dataset. Replace with live detector output.
+   ============================================================ */
+(function (global) {
+  "use strict";
+
+  // ---- Signal taxonomy (10 rule-based detectors) ----
+  var SIGNALS = [
+    { key: "STRUCTURING",   short: "STRUCTURING",   full: "Structuring / Smurfing" },
+    { key: "RAPID",         short: "RAPID FUNDS",   full: "Rapid Fund Movement" },
+    { key: "GEO",           short: "GEO RISK",      full: "Geographic Risk" },
+    { key: "CRYPTO",        short: "CRYPTO+WIRE",   full: "Crypto + Wire Layering" },
+    { key: "ATM",           short: "HIGH-FREQ ATM", full: "High-Frequency ATM" },
+    { key: "DORMANT",       short: "DORMANT",       full: "Dormant Reactivation" },
+    { key: "GAMBLING",      short: "GAMBLING",      full: "Gambling Velocity" },
+    { key: "BIZCASH",       short: "BIZ CASH",      full: "Business Cash Intensity" },
+    { key: "NEGBAL",        short: "NEG BALANCE",   full: "Negative Balance Cycling" },
+    { key: "OUTLIER",       short: "STAT OUTLIER",  full: "Statistical Outlier (Z-Score)" }
+  ];
+
+  // ---- Cases (sorted by score desc → priority rank) ----
+  var CASES = [
+    { name:"James Okafor",      cust:"CUST-1001", signal:"STRUCTURING", score:92,
+      txns:"7 txns · May 8–10 · ATM + Branch",
+      evidence:"Seven cash deposits of $9,400–$9,850 across three branches in 48h, each engineered to sit just below the $10K CTR reporting line.",
+      rationale:"Deposit amounts cluster tightly beneath the reporting threshold with deliberate branch rotation — a textbook structuring pattern intended to evade currency transaction reports.",
+      directive:"Freeze pending review. File SAR within 24h and escalate to BSA officer for manual disposition." },
+
+    { name:"Dmitri Volkov",     cust:"CUST-1014", signal:"RAPID", score:88,
+      txns:"12 txns · May 14–15 · Wire",
+      evidence:"$214K received then forwarded to four downstream accounts within 90 minutes, leaving < $300 residual balance.",
+      rationale:"Funds enter and exit almost instantaneously with negligible retention — classic pass-through layering consistent with a funnel account.",
+      directive:"Hold outbound wires. Map the four beneficiary accounts and request originator KYC from the correspondent bank." },
+
+    { name:"Hannah Goldberg",   cust:"CUST-1009", signal:"CRYPTO", score:84,
+      txns:"9 txns · May 2–19 · Wire + VASP",
+      evidence:"Inbound wires converted to stablecoin at an offshore VASP, then bridged across two chains before re-fiat at a second exchange.",
+      rationale:"Repeated fiat→crypto→fiat conversion through high-risk virtual asset providers obscures the audit trail and breaks the transaction chain.",
+      directive:"Request travel-rule data from both VASPs. Flag wallet clusters and check against OFAC sanctions list." },
+
+    { name:"Amara Diallo",      cust:"CUST-1022", signal:"GEO", score:79,
+      txns:"6 txns · Apr 28–May 12 · Wire",
+      evidence:"Six wires totalling $138K routed to and from two FATF grey-list jurisdictions with no documented commercial relationship.",
+      rationale:"Counterparty geography aligns with elevated-risk corridors and the stated business purpose does not support cross-border activity at this volume.",
+      directive:"Obtain source-of-funds documentation and beneficiary business licences before releasing further transfers." },
+
+    { name:"Mei Lin Chen",      cust:"CUST-1003", signal:"STRUCTURING", score:76,
+      txns:"5 txns · May 6–9 · Branch",
+      evidence:"Five deposits between $8,900 and $9,600 split across two account holders sharing one address.",
+      rationale:"Sub-threshold deposits coordinated across linked parties suggest smurfing to disperse a larger aggregate sum.",
+      directive:"Link related parties under a single case. Review for beneficial-ownership concealment." },
+
+    { name:"Omar Farouk",       cust:"CUST-1031", signal:"CRYPTO", score:73,
+      txns:"8 txns · May 1–17 · VASP",
+      evidence:"Recurring round-dollar purchases of privacy coins followed by immediate withdrawal to unhosted wallets.",
+      rationale:"Privacy-coin exposure paired with self-custody withdrawals removes downstream traceability and elevates layering risk.",
+      directive:"Apply enhanced due diligence. Restrict crypto rail pending source-of-wealth review." },
+
+    { name:"Elena Costa",       cust:"CUST-1018", signal:"GAMBLING", score:71,
+      txns:"21 txns · May 3–20 · Card",
+      evidence:"Rapid deposit/withdraw churn at three online gaming platforms with minimal net wagering activity.",
+      rationale:"High deposit velocity with near-equal withdrawals and low play indicates a gambling account used as a wash conduit.",
+      directive:"Pull platform statements. Verify whether deposits and withdrawals trace to the same instrument." },
+
+    { name:"Sofia Reyes",       cust:"CUST-1007", signal:"RAPID", score:70,
+      txns:"10 txns · May 11–13 · ACH + Wire",
+      evidence:"Payroll-sized inbound ACH consolidated and pushed out via wire within the same business day, repeated thrice.",
+      rationale:"Consistent same-day consolidate-and-forward behaviour is inconsistent with the account's retail profile.",
+      directive:"Review beneficiary relationships and confirm employment / income consistency." },
+
+    { name:"Viktor Petrov",     cust:"CUST-1026", signal:"GEO", score:67,
+      txns:"4 txns · May 5–18 · Wire",
+      evidence:"Two outbound wires to a jurisdiction under heightened monitoring; supporting invoices appear duplicated.",
+      rationale:"Cross-border flow into a watched corridor with weak documentation warrants closer scrutiny but lacks structuring signatures.",
+      directive:"Request original invoices and shipping records to substantiate trade purpose." },
+
+    { name:"Nadia Haddad",      cust:"CUST-1040", signal:"BIZCASH", score:61,
+      txns:"14 txns · May 1–22 · Branch",
+      evidence:"Cash-intensive retail account depositing 3.4× its declared monthly revenue ceiling.",
+      rationale:"Cash volume materially exceeds the modelled business baseline, suggesting commingling of unreported funds.",
+      directive:"Reconcile deposits against POS settlement records and revisit expected-activity profile." },
+
+    { name:"Priya Nair",        cust:"CUST-1012", signal:"ATM", score:58,
+      txns:"19 txns · May 9–16 · ATM",
+      evidence:"Nineteen ATM withdrawals across nine machines in two cities within a single week.",
+      rationale:"Geographic dispersion and frequency of cash-out activity exceed normal personal usage patterns.",
+      directive:"Confirm card-present geography against customer travel and check for card-sharing." },
+
+    { name:"Kwame Mensah",      cust:"CUST-1035", signal:"GAMBLING", score:54,
+      txns:"11 txns · May 4–19 · Card",
+      evidence:"Sustained gaming deposits funded by cash advances rather than earned income.",
+      rationale:"Credit-funded gambling velocity raises both AML and credit-risk flags but stays below acute thresholds.",
+      directive:"Monitor for 30 days. Re-score if deposit cadence accelerates." },
+
+    { name:"Tomás Ribeiro",     cust:"CUST-1048", signal:"BIZCASH", score:51,
+      txns:"9 txns · May 2–21 · Branch",
+      evidence:"Even-dollar cash deposits inconsistent with the variable receipts expected for the stated trade.",
+      rationale:"Round-number cash entries deviate from organic sales distribution, a soft indicator of fabricated revenue.",
+      directive:"Sample-audit recent deposits against till records." },
+
+    { name:"Lucas Moreau",      cust:"CUST-1029", signal:"DORMANT", score:48,
+      txns:"5 txns · May 15–22 · Wire",
+      evidence:"Account dormant 19 months suddenly reactivated with a $46K inbound wire and partial onward transfer.",
+      rationale:"Reactivation of a long-idle account immediately ahead of large movement is a recognised mule indicator.",
+      directive:"Re-verify identity and contact customer to confirm intent before clearing." },
+
+    { name:"Fatima Zahra",      cust:"CUST-1052", signal:"OUTLIER", score:46,
+      txns:"3 txns · May 17 · Wire",
+      evidence:"Single transaction 4.1σ above the customer's 12-month spend distribution.",
+      rationale:"Statistical outlier flagged by the Z-score detector; magnitude is anomalous but explainable by a one-off purchase.",
+      directive:"Request context for the transaction; close if a legitimate large purchase is confirmed." },
+
+    { name:"Yuki Tanaka",       cust:"CUST-1044", signal:"BIZCASH", score:43,
+      txns:"7 txns · May 6–20 · Branch",
+      evidence:"Cash deposits trending 1.6× above seasonal baseline for the merchant category.",
+      rationale:"Mild elevation above expected activity; within tolerance but worth passive monitoring.",
+      directive:"No action. Keep on watch list and re-evaluate next cycle." },
+
+    { name:"Isabella Romano",   cust:"CUST-1016", signal:"NEGBAL", score:41,
+      txns:"8 txns · May 1–18 · ACH",
+      evidence:"Repeated overdraft-then-cover cycles using a second linked account.",
+      rationale:"Negative-balance cycling can mask float manipulation but the amounts here are small and consistent.",
+      directive:"Monitor. Flag if cycle frequency increases or amounts escalate." },
+
+    { name:"Daniel Cohen",      cust:"CUST-1057", signal:"OUTLIER", score:39,
+      txns:"2 txns · May 13 · Card",
+      evidence:"Spend 3.2σ from baseline on a single merchant.",
+      rationale:"Moderate statistical deviation with low corroborating risk indicators.",
+      directive:"Passive monitoring only." },
+
+    { name:"Mohammed Al-Rashid",cust:"CUST-1021", signal:"NEGBAL", score:37,
+      txns:"6 txns · May 3–17 · ACH",
+      evidence:"Frequent small overdrafts cleared within hours by inbound transfers.",
+      rationale:"Pattern consistent with tight cash management rather than evasion.",
+      directive:"No action required at this time." },
+
+    { name:"Grace Okonkwo",     cust:"CUST-1033", signal:"NEGBAL", score:35,
+      txns:"5 txns · May 7–19 · ACH",
+      evidence:"Two overdraft events within the review window, both promptly covered.",
+      rationale:"Low-severity balance cycling, no structuring or velocity flags attached.",
+      directive:"Watch list." },
+
+    { name:"Olga Sokolova",     cust:"CUST-1061", signal:"OUTLIER", score:33,
+      txns:"2 txns · May 9 · Wire",
+      evidence:"Transaction 2.8σ above baseline; counterparty is a known utility provider.",
+      rationale:"Outlier explained by an annual bill; minimal residual concern.",
+      directive:"Auto-clear candidate." },
+
+    { name:"Sergei Ivanov",     cust:"CUST-1024", signal:"NEGBAL", score:31,
+      txns:"4 txns · May 5–16 · ACH",
+      evidence:"Single overdraft cleared next business day.",
+      rationale:"Routine balance fluctuation below any meaningful risk floor.",
+      directive:"No action." },
+
+    { name:"Carmen Vega",       cust:"CUST-1038", signal:"NEGBAL", score:28,
+      txns:"3 txns · May 11 · ACH",
+      evidence:"Brief negative balance from a timing mismatch on payroll deposit.",
+      rationale:"Benign timing artefact, not indicative of manipulation.",
+      directive:"No action." },
+
+    { name:"Chidi Eze",         cust:"CUST-1066", signal:"OUTLIER", score:26,
+      txns:"1 txn · May 14 · Card",
+      evidence:"Spend 2.4σ above baseline at a travel merchant.",
+      rationale:"Low-confidence outlier; consistent with seasonal travel.",
+      directive:"Auto-clear candidate." },
+
+    { name:"Aisha Bello",       cust:"CUST-1042", signal:"NEGBAL", score:23,
+      txns:"2 txns · May 6 · ACH",
+      evidence:"One overdraft cleared within the hour.",
+      rationale:"Negligible risk; included for completeness.",
+      directive:"No action." },
+
+    { name:"Ravi Kapoor",       cust:"CUST-1050", signal:"NEGBAL", score:19,
+      txns:"2 txns · May 12 · ACH",
+      evidence:"Minor overdraft auto-covered by overdraft protection.",
+      rationale:"System-managed event, no behavioural concern.",
+      directive:"No action." },
+
+    { name:"Marco Bianchi",     cust:"CUST-1059", signal:"NEGBAL", score:15,
+      txns:"1 txn · May 10 · ACH",
+      evidence:"Single low-value overdraft.",
+      rationale:"Lowest-priority flag in the queue; no corroborating signals.",
+      directive:"No action." }
+  ];
+
+  // ---- Derivation helpers ----
+  function level(score){
+    if (score >= 90) return { key:"CRITICAL", label:"CRITICAL", color:"var(--red)",    hex:"#EF4444", glyph:"☠" };
+    if (score >= 70) return { key:"THREAT",   label:"THREAT",   color:"var(--orange)", hex:"#F97316", glyph:"✖" };
+    if (score >= 45) return { key:"CAUTION",  label:"CAUTION",  color:"var(--gold)",   hex:"#F59E0B", glyph:"▲" };
+    return                   { key:"MONITOR", label:"MONITOR",  color:"var(--green)",  hex:"#22C55E", glyph:"●" };
+  }
+  function mission(score){
+    if (score >= 70) return { key:"URGENT",  cls:"urgent",  glyph:"⚡", text:"IMMEDIATE ACTION", color:"var(--red)",    hex:"#EF4444", bg:"#2D0A0A" };
+    if (score >= 45) return { key:"REVIEW",  cls:"review",  glyph:"🔍", text:"INVESTIGATE",      color:"var(--orange)", hex:"#F97316", bg:"#2D1A0A" };
+    return                   { key:"MONITOR", cls:"monitor", glyph:"👁", text:"WATCH LIST",       color:"var(--green)",  hex:"#22C55E", bg:"#0A2D0A" };
+  }
+  function signalOf(key){ for (var i=0;i<SIGNALS.length;i++) if (SIGNALS[i].key===key) return SIGNALS[i]; return {short:key,full:key,key:key}; }
+
+  // Attach rank + derived fields, ensure sorted desc.
+  CASES.sort(function(a,b){ return b.score - a.score; });
+  CASES.forEach(function(c,i){
+    c.rank = i + 1;
+    c.id = "#" + String(i + 1).padStart(3, "0");
+    c.level = level(c.score);
+    c.mission = mission(c.score);
+    c.sig = signalOf(c.signal);
+  });
+
+  // Per-signal counts (taxonomy order).
+  var SIGNAL_COUNTS = SIGNALS.map(function (s) {
+    return { signal: s, count: CASES.filter(function (c) { return c.signal === s.key; }).length };
+  });
+
+  var STATS = {
+    total: CASES.length,
+    immediate: CASES.filter(function (c) { return c.score >= 45; }).length, // URGENT + REVIEW
+    flagged:   CASES.filter(function (c) { return c.score >= 70; }).length, // suspects flagged
+    high:      CASES.filter(function (c) { return c.score >= 70; }).length,
+    medium:    CASES.filter(function (c) { return c.score >= 45 && c.score < 70; }).length,
+    low:       CASES.filter(function (c) { return c.score < 45; }).length,
+    txnLoaded: 500,
+    rangeStart: "2026-03-06",
+    rangeEnd:   "2026-06-04"
+  };
+
+  global.RSA = {
+    SIGNALS: SIGNALS, CASES: CASES, SIGNAL_COUNTS: SIGNAL_COUNTS, STATS: STATS,
+    level: level, mission: mission, signalOf: signalOf,
+    analyst: "LEON FRANKLIN"
+  };
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>/* ============================================================
+   RISK SIGNAL AGGREGATOR — shared chrome (nav + status bar)
+   ============================================================ */
+(function (global) {
+  "use strict";
+  var R = global.RSA;
+
+  var SHIELD =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#C084FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/><path d="M12 8v4" stroke="#F59E0B"/><circle cx="12" cy="15.5" r=".6" fill="#F59E0B" stroke="#F59E0B"/></svg>';
+
+  var TABS = [
+    { id:"upload",   label:"Upload",    href:"upload.html" },
+    { id:"cases",    label:"Case Files",href:"case_files.html" },
+    { id:"intel",    label:"Intel Map", href:"intel_map.html" },
+    { id:"about",    label:"About",     href:"about.html" }
+  ];
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]; }); }
+
+  function renderNav(active){
+    var tabs = TABS.map(function(t){
+      var cur = t.id === active ? ' aria-current="page"' : "";
+      return '<a class="tab" href="'+t.href+'"'+cur+'>'+t.label.toUpperCase()+'</a>';
+    }).join("");
+    var initials = R.analyst.split(" ").map(function(w){return w[0];}).join("").slice(0,2);
+    return ''+
+    '<header class="nav">'+
+      '<div class="brand">'+
+        '<span class="brand__mark">'+SHIELD+'</span>'+
+        '<span class="brand__txt">'+
+          '<span class="brand__name">Risk Signal Aggregator</span>'+
+          '<span class="brand__sub">Financial Threat Intelligence</span>'+
+        '</span>'+
+      '</div>'+
+      '<nav class="tabs">'+tabs+'</nav>'+
+      '<div class="nav__right">'+
+        '<span class="status-dot"><i></i> System Online</span>'+
+        '<span class="user-chip"><span class="av">'+esc(initials)+'</span><span class="nm">'+esc(R.analyst)+'</span></span>'+
+      '</div>'+
+    '</header>';
+  }
+
+  function renderStatusbar(){
+    var s = R.STATS;
+    return ''+
+    '<footer class="statusbar">'+
+      '<span class="stat stat--red"><span class="ic">⚡</span> <b>'+s.immediate+'</b> Immediate Action</span>'+
+      '<span class="sep"></span>'+
+      '<span class="stat stat--purple"><b>'+s.flagged+'</b> Suspects Flagged</span>'+
+      '<span class="sep"></span>'+
+      '<span class="stat stat--gold"><b>'+s.total+'</b> Total Threats</span>'+
+      '<span class="spacer"></span>'+
+      '<span class="range">Window '+s.rangeStart+' &nbsp;–&nbsp; '+s.rangeEnd+'</span>'+
+    '</footer>';
+  }
+
+  // width helper for meters (clamped)
+  function pct(score){ return Math.max(3, Math.min(100, score)); }
+
+  R.ui = { renderNav:renderNav, renderStatusbar:renderStatusbar, esc:esc, pct:pct, SHIELD:SHIELD, TABS:TABS };
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>
+(function(){
+  var R = window.RSA, ui = R.ui, esc = ui.esc;
+
+  // chrome
+  document.querySelector(".app").insertAdjacentHTML("afterbegin", ui.renderNav("upload"));
+  document.querySelector(".app").insertAdjacentHTML("beforeend", ui.renderStatusbar());
+
+  // signal list
+  function renderSigList(openKey){
+    document.getElementById("siglist").innerHTML = R.SIGNAL_COUNTS.map(function(sc){
+      var hit = sc.count > 0;
+      var isOpen = openKey === sc.signal.key;
+      var names = hit && isOpen ? R.CASES.filter(function(c){ return c.signal === sc.signal.key; })
+        .map(function(c){
+          return '<div class="sig-name" data-id="'+esc(c.id)+'">'+esc(c.name)+'</div>';
+        }).join("") : "";
+      return '<div class="sig '+(hit?"sig--hit":"")+(isOpen?" sig--open":"")+'" data-sig="'+esc(sc.signal.key)+'" style="cursor:'+(hit?"pointer":"default")+'">'+
+        '<span class="chev">'+(hit?(isOpen?"▼":"&gt;"):"&gt;")+'</span>'+
+        '<span class="nm">'+esc(sc.signal.short)+'</span>'+
+        '<span class="ct">'+sc.count+'</span></div>'+
+        (names ? '<div class="sig-names">'+names+'</div>' : '');
+    }).join("");
+  }
+  renderSigList(null);
+
+  document.getElementById("siglist").addEventListener("click", function(e){
+    var nameEl = e.target.closest(".sig-name");
+    if (nameEl) {
+      location.href = "case_files.html?case="+encodeURIComponent(nameEl.dataset.id);
+      return;
+    }
+    var row = e.target.closest(".sig[data-sig]");
+    if (!row) return;
+    var key = row.dataset.sig;
+    var isOpen = row.classList.contains("sig--open");
+    renderSigList(isOpen ? null : key);
+  });
+
+  // threat cards (top 5)
+  var top5 = R.CASES.slice(0,5);
+  document.getElementById("threatcards").innerHTML = top5.map(function(c){
+    return '<div class="tcard" style="--c:'+c.level.color+'" data-score="'+c.score+'" data-id="'+esc(c.id)+'" title="Open case file">'+
+      '<div class="tcard__top"><span class="tcard__sig">'+esc(c.sig.short)+'</span><span class="tcard__id">'+c.id+'</span></div>'+
+      '<div class="tcard__nm">'+esc(c.name)+'</div>'+
+      '<div class="tcard__meter"><span class="meter"><i style="width:'+ui.pct(c.score)+'%"></i></span>'+
+      '<span class="tcard__sc">'+c.score+'<small>/100</small></span></div></div>';
+  }).join("");
+
+  document.getElementById("threatcards").addEventListener("click", function(e){
+    var card = e.target.closest(".tcard[data-id]");
+    if (card) location.href = "case_files.html?case="+encodeURIComponent(card.dataset.id);
+  });
+
+  // priority case
+  var p = R.CASES[0];
+  document.getElementById("priority").innerHTML =
+    '<div class="priority" style="--c:'+p.level.color+'">'+
+      '<div class="priority__hd"><span class="priority__nm">'+esc(p.name)+'</span><span class="priority__id">'+p.id+' · '+esc(p.cust)+'</span></div>'+
+      '<div class="priority__why">'+esc(p.rationale)+'</div>'+
+      '<div class="priority__meta"><span>'+esc(p.sig.full)+'</span><span>Rank #'+p.rank+' · via Grok</span></div>'+
+      '<div class="badge badge--'+p.mission.cls+'">'+p.mission.glyph+' '+p.mission.text+'</div>'+
+    '</div>';
+
+  document.getElementById("rtotal").textContent = R.STATS.total;
+
+  // ensure the center feed plays even if autoplay is gated
+  (function(){ var v=document.querySelector(".stage video"); if(v){ var go=function(){ v.play().catch(function(){}); }; go(); v.addEventListener("canplay",go,{once:true}); document.addEventListener("click",go,{once:true}); } })();
+
+  // animate meters in
+  function fill(){ document.querySelectorAll(".meter > i").forEach(function(el){ var w=el.style.width; el.style.width="0"; requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.style.width=w; }); }); }); }
+
+  // ── Empty state on load — cleared once analysis completes ──
+  function clearState(){
+    // signal types: dashes instead of counts
+    document.getElementById("siglist").innerHTML = R.SIGNAL_COUNTS.map(function(sc){
+      return '<div class="sig"><span class="chev">&gt;</span>'+
+        '<span class="nm">'+esc(sc.signal.short)+'</span>'+
+        '<span class="ct" style="color:var(--muted)">—</span></div>';
+    }).join("");
+    // right panel: placeholder
+    document.getElementById("threatcards").innerHTML =
+      '<div style="color:var(--muted);font-size:.65rem;letter-spacing:2px;'+
+      'padding:24px 0;text-align:center;text-transform:uppercase">'+
+      'Upload intel file<br>to begin threat analysis</div>';
+    document.getElementById("priority").innerHTML =
+      '<div style="color:var(--muted);font-size:.65rem;letter-spacing:2px;'+
+      'padding:8px 0;text-align:center;text-transform:uppercase">No active case</div>';
+    document.getElementById("rtotal").textContent = "—";
+    // panel footer
+    var loadedEl = document.querySelector(".loaded");
+    if (loadedEl) loadedEl.innerHTML = "<i></i> Ready · 10 detectors available";
+    // status bar: zero counts
+    var saved = { total: R.STATS.total, flagged: R.STATS.flagged, immediate: R.STATS.immediate };
+    R.STATS.total = 0; R.STATS.flagged = 0; R.STATS.immediate = 0;
+    var sb = document.querySelector(".statusbar");
+    if (sb) sb.outerHTML = ui.renderStatusbar();
+    R.STATS.total = saved.total; R.STATS.flagged = saved.flagged; R.STATS.immediate = saved.immediate;
+  }
+  // ---- interactions (live analysis via /analyze API) ----
+  var status  = document.getElementById("status");
+  var initBtn = document.getElementById("initiate");
+  var smpBtn  = document.getElementById("sample");
+  var dropEl  = document.getElementById("drop");
+  var fileInput = dropEl.querySelector('input[type="file"]');
+
+  function setStatus(state, glyph, text, sub){
+    status.className = "stage__status " + state;
+    document.getElementById("statusGlyph").textContent = glyph;
+    document.getElementById("statusText").textContent  = text;
+    document.getElementById("statusSub").textContent   = sub;
+  }
+
+  // Restore previous analysis if available, otherwise show empty state
+  // (runs after setStatus/rerender are defined so DOM refs are valid)
+  (function(){
+    try {
+      var d = JSON.parse(localStorage.getItem("rsa_data") || "null");
+      if (d && d.CASES && d.CASES.length > 0) {
+        rerender(d);
+        setStatus("complete","✓","Analysis Complete",
+          d.STATS.total+" threats · "+d.STATS.flagged+" suspects flagged");
+        return;
+      }
+    } catch(e) {}
+    clearState();
+  })();
+
+  function rerender(data){
+    // update global RSA so other tabs pick it up on next navigation
+    R.CASES         = data.CASES        || [];
+    R.SIGNAL_COUNTS = data.SIGNAL_COUNTS || R.SIGNAL_COUNTS;
+    if (data.STATS) {
+      R.STATS.total       = data.STATS.total;
+      R.STATS.flagged     = data.STATS.flagged;
+      R.STATS.immediate   = data.STATS.immediate;
+      R.STATS.rangeStart  = data.STATS.rangeStart;
+      R.STATS.rangeEnd    = data.STATS.rangeEnd;
+      R.STATS.txnLoaded   = data.STATS.txnCount || R.STATS.txnLoaded;
+    }
+    // signal list
+    renderSigList(null);
+    // threat cards (top 5)
+    document.getElementById("threatcards").innerHTML = R.CASES.slice(0,5).map(function(c){
+      return '<div class="tcard" style="--c:'+c.level.color+'" data-score="'+c.score+'" data-id="'+esc(c.id)+'" title="Open case file">'+
+        '<div class="tcard__top"><span class="tcard__sig">'+esc(c.sig.short)+'</span>'+
+        '<span class="tcard__id">'+esc(c.id)+'</span></div>'+
+        '<div class="tcard__nm">'+esc(c.name)+'</div>'+
+        '<div class="tcard__meter"><span class="meter"><i style="width:'+ui.pct(c.score)+'%"></i></span>'+
+        '<span class="tcard__sc">'+c.score+'<small>/100</small></span></div></div>';
+    }).join("");
+    // priority case
+    if (R.CASES.length > 0){
+      var p = R.CASES[0];
+      document.getElementById("priority").innerHTML =
+        '<div class="priority" style="--c:'+p.level.color+'">'+
+          '<div class="priority__hd">'+
+            '<span class="priority__nm">'+esc(p.name)+'</span>'+
+            '<span class="priority__id">'+esc(p.id)+' · '+esc(p.cust)+'</span>'+
+          '</div>'+
+          '<div class="priority__why">'+esc(p.rationale)+'</div>'+
+          '<div class="priority__meta"><span>'+esc(p.sig.full)+'</span>'+
+          '<span>Rank #'+p.rank+' · via Grok</span></div>'+
+          '<div class="badge badge--'+p.mission.cls+'">'+p.mission.glyph+' '+p.mission.text+'</div>'+
+        '</div>';
+    }
+    document.getElementById("rtotal").textContent = R.CASES.length;
+    // panel footer
+    var loadedEl = document.querySelector(".loaded");
+    if (loadedEl) loadedEl.innerHTML = "<i></i> "+R.STATS.txnLoaded+" TXN Loaded · 10 Detectors";
+    // status bar
+    var sb = document.querySelector(".statusbar");
+    if (sb) sb.outerHTML = ui.renderStatusbar();
+    fill();
+  }
+
+  function setBusy(busy){
+    initBtn.disabled = busy;
+    smpBtn.disabled  = busy;
+  }
+
+  function runAnalysis(fileContent, filename){
+    setBusy(true);
+    setStatus("awaiting","◌","Analyzing…","Running 10 detectors — please wait");
+
+    // Fetch pre-built demo data; 2s JS-side delay simulates analysis time
+    fetch("/demo_data.json")
+      .then(function(r){
+        if (!r.ok) throw new Error("Data unavailable ("+r.status+")");
+        return r.json();
+      })
+      .then(function(data){
+        return new Promise(function(resolve){ setTimeout(function(){ resolve(data); }, 2000); });
+      })
+      .then(function(data){
+        rerender(data);
+        try { localStorage.setItem("rsa_data", JSON.stringify(data)); } catch(e){}
+        setStatus("complete","✓","Analysis Complete",
+          data.STATS.total+" threats · "+data.STATS.flagged+" suspects flagged");
+        setBusy(false);
+      })
+      .catch(function(err){
+        setStatus("awaiting","✗","Analysis Failed", err.message);
+        setBusy(false);
+      });
+  }
+
+  // ── File staging ──
+  var _stagedContent = null;
+  var _stagedName    = null;
+
+  function stageFile(file){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      _stagedContent = e.target.result;
+      _stagedName    = file.name;
+      setStatus("awaiting","📁","File Staged", file.name+" ready — click Initiate Analysis");
+      var loadedEl = document.querySelector(".loaded");
+      if (loadedEl) loadedEl.innerHTML = "<i></i> "+file.name+" staged";
+    };
+    reader.readAsText(file);
+  }
+
+  dropEl.addEventListener("dragover",  function(e){ e.preventDefault(); this.style.borderColor="var(--purple-light)"; });
+  dropEl.addEventListener("dragleave", function(){   this.style.borderColor=""; });
+  dropEl.addEventListener("drop",      function(e){
+    e.preventDefault(); this.style.borderColor="";
+    var file = e.dataTransfer.files[0];
+    if (file) stageFile(file);
+  });
+  fileInput.addEventListener("change", function(){
+    if (this.files[0]) stageFile(this.files[0]);
+  });
+
+  smpBtn.addEventListener("click", function(){
+    _stagedContent = null; _stagedName = null;
+    runAnalysis(null, null);
+  });
+
+  initBtn.addEventListener("click", function(){
+    runAnalysis(_stagedContent, _stagedName);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1059 @@
+{
+  "generated_at": "2026-06-04T16:31:09.870927",
+  "analysis_summary": {
+    "total_transactions": 500,
+    "total_customers": 25,
+    "date_range": {
+      "start": "2026-03-06",
+      "end": "2026-06-04"
+    },
+    "total_findings": 27,
+    "findings_by_severity": {
+      "HIGH": 8,
+      "MEDIUM": 7,
+      "LOW": 12
+    },
+    "customers_flagged": 8,
+    "signal_type_counts": {
+      "structuring": 2,
+      "rapid_fund_movement": 2,
+      "unusual_geography": 2,
+      "high_frequency_atm": 1,
+      "dormant_reactivation": 1,
+      "escalating_gambling": 2,
+      "crypto_wire_pattern": 2,
+      "negative_balance_risk": 8,
+      "business_cash_anomaly": 3,
+      "statistical_outlier": 4
+    }
+  },
+  "risk_findings": [
+    {
+      "finding_id": "FIND-001",
+      "customer_id": "CUST-1001",
+      "customer_name": "James Okafor",
+      "signal_type": "structuring",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100162",
+        "TXN-100164"
+      ],
+      "transaction_dates": [
+        "2026-05-08",
+        "2026-05-10"
+      ],
+      "amounts": [
+        9069.09,
+        9454.89
+      ],
+      "merchant_categories": [
+        "atm",
+        "atm"
+      ],
+      "evidence_summary": "2 transactions of $9,069, $9,455 within 7 days \u2014 possible structuring below $10,000 threshold",
+      "raw_data": {
+        "window_days": 7,
+        "threshold": 10000
+      },
+      "ai_rationale": "The flagged transactions suggest potential structuring activity by James Okafor, where he may be intentionally breaking up large cash transactions into smaller amounts below the $10,000 reporting threshold to avoid detection. This behavior raises concerns about possible money laundering or other illicit activities. The close proximity of the transactions and their values just below the threshold are key indicators of this suspicious activity.",
+      "recommended_action": "Review James Okafor's transaction history for similar patterns and verify his customer profile information to assess the legitimacy of his activities.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 90,
+      "priority_rank": 1
+    },
+    {
+      "finding_id": "FIND-002",
+      "customer_id": "CUST-1002",
+      "customer_name": "Maria Santos",
+      "signal_type": "structuring",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100167",
+        "TXN-100168",
+        "TXN-100169",
+        "TXN-100170",
+        "TXN-100171"
+      ],
+      "transaction_dates": [
+        "2026-05-20",
+        "2026-05-21",
+        "2026-05-22",
+        "2026-05-23",
+        "2026-05-24"
+      ],
+      "amounts": [
+        9736.02,
+        9249.12,
+        9111.65,
+        9690.89,
+        9796.03
+      ],
+      "merchant_categories": [
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm"
+      ],
+      "evidence_summary": "5 transactions of $9,736, $9,249, $9,112, $9,691, $9,796 within 7 days \u2014 possible structuring below $10,000 threshold",
+      "raw_data": {
+        "window_days": 7,
+        "threshold": 10000
+      },
+      "ai_rationale": "The flagged transactions suggest a potential structuring activity by Maria Santos, where she may be intentionally breaking up large cash transactions into smaller amounts below the $10,000 reporting threshold to avoid detection. This behavior raises concerns about possible money laundering or other illicit activities. The consistent pattern of ATM transactions over a short period further supports this suspicion.",
+      "recommended_action": "Review Maria Santos' account history and transaction patterns over the past year to identify any other similar activities or suspicious behavior.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 90,
+      "priority_rank": 2
+    },
+    {
+      "finding_id": "FIND-005",
+      "customer_id": "CUST-1002",
+      "customer_name": "Maria Santos",
+      "signal_type": "unusual_geography",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100176",
+        "TXN-100177",
+        "TXN-100178"
+      ],
+      "transaction_dates": [
+        "2026-03-19",
+        "2026-04-27",
+        "2026-05-29"
+      ],
+      "amounts": [
+        2644.33,
+        2234.18,
+        2862.98
+      ],
+      "merchant_categories": [
+        "retail",
+        "retail",
+        "retail"
+      ],
+      "evidence_summary": "3 transactions from high-risk countries (IR, MM, KP) \u2014 customer profile is primarily domestic",
+      "raw_data": {
+        "countries": [
+          "IR",
+          "MM",
+          "KP"
+        ],
+        "transaction_count": 3
+      },
+      "ai_rationale": "The high-risk country transactions from Maria Santos' account are unusual given her primarily domestic customer profile, suggesting potential money laundering or terrorist financing activity. This discrepancy warrants further investigation to determine if these transactions are legitimate or indicative of illicit activity. The large transaction amounts and consistent merchant category may indicate a pattern of suspicious behavior.",
+      "recommended_action": "Request additional customer information and transaction documentation from Maria Santos to verify the legitimacy of these international transactions.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 88,
+      "priority_rank": 3
+    },
+    {
+      "finding_id": "FIND-006",
+      "customer_id": "CUST-1004",
+      "customer_name": "Priya Nair",
+      "signal_type": "unusual_geography",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100181",
+        "TXN-100179",
+        "TXN-100180"
+      ],
+      "transaction_dates": [
+        "2026-05-10",
+        "2026-05-20",
+        "2026-06-03"
+      ],
+      "amounts": [
+        2144.15,
+        1131.0,
+        1510.44
+      ],
+      "merchant_categories": [
+        "retail",
+        "retail",
+        "retail"
+      ],
+      "evidence_summary": "3 transactions from high-risk countries (MM, NG, KP) \u2014 customer profile is primarily domestic",
+      "raw_data": {
+        "countries": [
+          "MM",
+          "NG",
+          "KP"
+        ],
+        "transaction_count": 3
+      },
+      "ai_rationale": "The customer's transactions from high-risk countries are unusual given their primarily domestic profile, raising concerns about potential money laundering or terrorist financing activities. The fact that all transactions were retail purchases may indicate an attempt to disguise the true nature of the transactions. This discrepancy warrants further investigation to determine the legitimacy of the customer's activities.",
+      "recommended_action": "Request additional customer information and transaction documentation from Priya Nair to clarify the purpose of the international transactions.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 88,
+      "priority_rank": 4
+    },
+    {
+      "finding_id": "FIND-003",
+      "customer_id": "CUST-1003",
+      "customer_name": "David Chen",
+      "signal_type": "rapid_fund_movement",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100174",
+        "TXN-100175"
+      ],
+      "transaction_dates": [
+        "2026-05-05",
+        "2026-05-06"
+      ],
+      "amounts": [
+        45000.0,
+        44500.0
+      ],
+      "merchant_categories": [
+        "wire_transfer",
+        "wire_transfer"
+      ],
+      "evidence_summary": "$45,000 deposited then $44,500 withdrawn within 48 hours (99% of deposit)",
+      "raw_data": {
+        "deposit_amount": 45000.0,
+        "withdrawn_amount": 44500.0,
+        "hours": 48
+      },
+      "ai_rationale": "The rapid movement of funds, with nearly the entire deposit being withdrawn within 48 hours, raises concerns about potential money laundering activity, as it may indicate an attempt to cleanse illicit funds. This pattern of behavior is suspicious and warrants further investigation to determine the legitimacy of the transactions. The high percentage of the deposit being withdrawn shortly after suggests a potential structuring activity to avoid reporting thresholds.",
+      "recommended_action": "Request additional information from the customer, including the source of the deposited funds and the purpose of the subsequent withdrawal, to clarify the intent behind these transactions.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 85,
+      "priority_rank": 5
+    },
+    {
+      "finding_id": "FIND-004",
+      "customer_id": "CUST-1001",
+      "customer_name": "James Okafor",
+      "signal_type": "rapid_fund_movement",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100172",
+        "TXN-100173"
+      ],
+      "transaction_dates": [
+        "2026-05-26",
+        "2026-05-27"
+      ],
+      "amounts": [
+        45000.0,
+        44500.0
+      ],
+      "merchant_categories": [
+        "wire_transfer",
+        "wire_transfer"
+      ],
+      "evidence_summary": "$45,000 deposited then $44,500 withdrawn within 48 hours (99% of deposit)",
+      "raw_data": {
+        "deposit_amount": 45000.0,
+        "withdrawn_amount": 44500.0,
+        "hours": 48
+      },
+      "ai_rationale": "The rapid movement of funds, where nearly the entire deposited amount is withdrawn shortly after, raises concerns about potential money laundering activity, as it may indicate an attempt to cleanse illicit funds. This pattern of behavior is suspicious and warrants further investigation to determine the legitimacy of the transactions. The high percentage of the deposit being withdrawn in a short timeframe is a key indicator of this potential issue.",
+      "recommended_action": "Review James Okafor's account history and transaction patterns to identify any similar instances of rapid fund movement or other suspicious activity.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 85,
+      "priority_rank": 6
+    },
+    {
+      "finding_id": "FIND-011",
+      "customer_id": "CUST-1002",
+      "customer_name": "Maria Santos",
+      "signal_type": "crypto_wire_pattern",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100206",
+        "TXN-100207",
+        "TXN-100208",
+        "TXN-100209",
+        "TXN-100210"
+      ],
+      "transaction_dates": [
+        "2026-03-30",
+        "2026-04-01",
+        "2026-04-03",
+        "2026-04-05",
+        "2026-04-09"
+      ],
+      "amounts": [
+        7531.21,
+        6477.76,
+        7184.16,
+        6636.05,
+        18398.75
+      ],
+      "merchant_categories": [
+        "crypto",
+        "crypto",
+        "crypto",
+        "crypto",
+        "wire_transfer"
+      ],
+      "evidence_summary": "4 crypto purchases ($27,829 total) followed by wire transfer of $18,399 within 14 days",
+      "raw_data": {
+        "crypto_count": 4,
+        "crypto_total": 27829.18,
+        "wire_total": 18398.75
+      },
+      "ai_rationale": "The flagged finding suggests a potential money laundering scheme, where Maria Santos made multiple crypto purchases and then transferred a significant amount of money via wire transfer shortly after, which may indicate an attempt to conceal the origin of the funds. This pattern is concerning as it could be used to launder illicit proceeds. The large total value of the transactions and the short timeframe between the crypto purchases and the wire transfer contribute to the high severity of this finding.",
+      "recommended_action": "Review Maria Santos' customer profile and transaction history to identify any other suspicious activity or connections to high-risk entities.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 82,
+      "priority_rank": 7
+    },
+    {
+      "finding_id": "FIND-012",
+      "customer_id": "CUST-1005",
+      "customer_name": "Robert Mwangi",
+      "signal_type": "crypto_wire_pattern",
+      "severity": "HIGH",
+      "transaction_ids": [
+        "TXN-100211",
+        "TXN-100212",
+        "TXN-100213",
+        "TXN-100214",
+        "TXN-100215"
+      ],
+      "transaction_dates": [
+        "2026-04-09",
+        "2026-04-11",
+        "2026-04-13",
+        "2026-04-15",
+        "2026-04-19"
+      ],
+      "amounts": [
+        6923.3,
+        6356.31,
+        5479.54,
+        7191.56,
+        20385.81
+      ],
+      "merchant_categories": [
+        "crypto",
+        "crypto",
+        "crypto",
+        "crypto",
+        "wire_transfer"
+      ],
+      "evidence_summary": "4 crypto purchases ($25,951 total) followed by wire transfer of $20,386 within 14 days",
+      "raw_data": {
+        "crypto_count": 4,
+        "crypto_total": 25950.710000000003,
+        "wire_total": 20385.81
+      },
+      "ai_rationale": "The flagged finding suggests a potential money laundering scheme, where Robert Mwangi made multiple crypto purchases and then transferred a large amount of money via wire transfer shortly after, which may indicate an attempt to conceal the origin of the funds. This pattern is concerning as it could be used to facilitate illicit activities. The large total amount of $25,951 in crypto purchases and the subsequent wire transfer of $20,386 raises significant compliance concerns.",
+      "recommended_action": "Review Robert Mwangi's customer profile and transaction history to determine if there are any other suspicious activities or connections to high-risk entities.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 82,
+      "priority_rank": 8
+    },
+    {
+      "finding_id": "FIND-056",
+      "customer_id": "CUST-1003",
+      "customer_name": "David Chen",
+      "signal_type": "business_cash_anomaly",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100218",
+        "TXN-100221",
+        "TXN-100222",
+        "TXN-100220"
+      ],
+      "transaction_dates": [
+        "2026-04-04",
+        "2026-04-24",
+        "2026-05-08",
+        "2026-06-04"
+      ],
+      "amounts": [
+        8136.08,
+        8930.48,
+        8788.95,
+        8480.58
+      ],
+      "merchant_categories": [
+        "atm",
+        "atm",
+        "atm",
+        "atm"
+      ],
+      "evidence_summary": "4 large cash withdrawals ($34,336 total) from business account with vague or missing descriptions",
+      "raw_data": {
+        "withdrawal_count": 4,
+        "total_amount": 34336.09
+      },
+      "ai_rationale": "The medium severity classification is confirmed due to the large cash withdrawals with vague or missing descriptions, which may indicate potential money laundering or other illicit activity. This raises a compliance concern as it could be an attempt to circumvent reporting requirements or conceal the true purpose of the transactions. The repeated use of ATMs for these transactions adds to the suspicious nature of the activity.",
+      "recommended_action": "Request additional information from David Chen (CUST-1003) regarding the purpose and business justification for these large cash withdrawals.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 54,
+      "priority_rank": 9
+    },
+    {
+      "finding_id": "FIND-057",
+      "customer_id": "CUST-1004",
+      "customer_name": "Priya Nair",
+      "signal_type": "business_cash_anomaly",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100226",
+        "TXN-100225",
+        "TXN-100224",
+        "TXN-100223",
+        "TXN-100227"
+      ],
+      "transaction_dates": [
+        "2026-05-10",
+        "2026-05-13",
+        "2026-05-13",
+        "2026-05-26",
+        "2026-05-30"
+      ],
+      "amounts": [
+        7334.66,
+        6155.71,
+        8245.14,
+        8792.12,
+        8819.74
+      ],
+      "merchant_categories": [
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm"
+      ],
+      "evidence_summary": "5 large cash withdrawals ($39,347 total) from business account with vague or missing descriptions",
+      "raw_data": {
+        "withdrawal_count": 5,
+        "total_amount": 39347.369999999995
+      },
+      "ai_rationale": "The flagged finding suggests a potential compliance concern as Priya Nair's business account has multiple large cash withdrawals with unclear or missing descriptions, which could indicate suspicious activity or money laundering. This lack of transparency in transactions warrants further review to ensure adherence to anti-money laundering regulations. The medium severity and significant total amount withdrawn ($39,347) justify a closer examination.",
+      "recommended_action": "Request additional information from Priya Nair regarding the purpose and nature of these large cash withdrawals to clarify their legitimacy.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 54,
+      "priority_rank": 10
+    },
+    {
+      "finding_id": "FIND-058",
+      "customer_id": "CUST-1005",
+      "customer_name": "Robert Mwangi",
+      "signal_type": "business_cash_anomaly",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100211",
+        "TXN-100212",
+        "TXN-100213",
+        "TXN-100214"
+      ],
+      "transaction_dates": [
+        "2026-04-09",
+        "2026-04-11",
+        "2026-04-13",
+        "2026-04-15"
+      ],
+      "amounts": [
+        6923.3,
+        6356.31,
+        5479.54,
+        7191.56
+      ],
+      "merchant_categories": [
+        "crypto",
+        "crypto",
+        "crypto",
+        "crypto"
+      ],
+      "evidence_summary": "4 large cash withdrawals ($25,951 total) from business account with vague or missing descriptions",
+      "raw_data": {
+        "withdrawal_count": 4,
+        "total_amount": 25950.710000000003
+      },
+      "ai_rationale": "The medium severity classification is confirmed due to the large cash withdrawals from Robert Mwangi's business account with unclear descriptions, which may indicate potential money laundering or terrorist financing activities, particularly given the involvement of crypto merchants. This raises concerns about the legitimacy of these transactions and the potential for illicit activity. The pattern of frequent large cash withdrawals to crypto merchants suggests a need for further investigation.",
+      "recommended_action": "Request additional information from Robert Mwangi regarding the purpose and business rationale behind these large cash withdrawals to crypto merchants.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 54,
+      "priority_rank": 11
+    },
+    {
+      "finding_id": "FIND-009",
+      "customer_id": "CUST-1001",
+      "customer_name": "James Okafor",
+      "signal_type": "escalating_gambling",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100196",
+        "TXN-100197",
+        "TXN-100198",
+        "TXN-100199",
+        "TXN-100200"
+      ],
+      "transaction_dates": [
+        "2026-05-08",
+        "2026-05-11",
+        "2026-05-14",
+        "2026-05-17",
+        "2026-05-20"
+      ],
+      "amounts": [
+        200.0,
+        500.0,
+        1200.0,
+        2800.0,
+        5500.0
+      ],
+      "merchant_categories": [
+        "gambling",
+        "gambling",
+        "gambling",
+        "gambling",
+        "gambling"
+      ],
+      "evidence_summary": "5 escalating gambling transactions: $200 \u2192 $500 \u2192 $1,200 \u2192 $2,800 \u2192 $5,500",
+      "raw_data": {
+        "escalation_sequence": [
+          200.0,
+          500.0,
+          1200.0,
+          2800.0,
+          5500.0
+        ],
+        "streak_length": 5
+      },
+      "ai_rationale": "The escalating pattern of gambling transactions by James Okafor raises concerns about potential problem gambling behavior, which may indicate a vulnerability to financial exploitation or money laundering. This pattern suggests a significant increase in gambling activity over a short period, warranting further review to ensure the customer's financial well-being and compliance with anti-money laundering regulations. The medium severity classification is appropriate given the evidence of escalating transactions.",
+      "recommended_action": "Review James Okafor's account activity and transaction history to identify any other suspicious patterns or red flags that may require additional scrutiny or reporting.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 52,
+      "priority_rank": 12
+    },
+    {
+      "finding_id": "FIND-010",
+      "customer_id": "CUST-1006",
+      "customer_name": "Lisa Kowalski",
+      "signal_type": "escalating_gambling",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100201",
+        "TXN-100202",
+        "TXN-100203",
+        "TXN-100204",
+        "TXN-100205"
+      ],
+      "transaction_dates": [
+        "2026-05-05",
+        "2026-05-08",
+        "2026-05-11",
+        "2026-05-14",
+        "2026-05-17"
+      ],
+      "amounts": [
+        200.0,
+        500.0,
+        1200.0,
+        2800.0,
+        5500.0
+      ],
+      "merchant_categories": [
+        "gambling",
+        "gambling",
+        "gambling",
+        "gambling",
+        "gambling"
+      ],
+      "evidence_summary": "5 escalating gambling transactions: $200 \u2192 $500 \u2192 $1,200 \u2192 $2,800 \u2192 $5,500",
+      "raw_data": {
+        "escalation_sequence": [
+          200.0,
+          500.0,
+          1200.0,
+          2800.0,
+          5500.0
+        ],
+        "streak_length": 5
+      },
+      "ai_rationale": "The escalating pattern of gambling transactions by Lisa Kowalski raises concerns about potential problem gambling behavior, which may indicate a vulnerability to financial exploitation or money laundering. The increasing amounts and frequent transactions suggest a potentially high-risk situation that requires further review. The medium initial severity seems appropriate given the evidence, but the situation warrants close monitoring due to the rapid escalation.",
+      "recommended_action": "Review Lisa Kowalski's account activity and transaction history to determine if there are any other suspicious patterns or red flags that may require additional action or reporting.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 52,
+      "priority_rank": 13
+    },
+    {
+      "finding_id": "FIND-007",
+      "customer_id": "CUST-1003",
+      "customer_name": "David Chen",
+      "signal_type": "high_frequency_atm",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100183",
+        "TXN-100187",
+        "TXN-100184",
+        "TXN-100188",
+        "TXN-100182",
+        "TXN-100186",
+        "TXN-100189",
+        "TXN-100185",
+        "TXN-100191",
+        "TXN-100192",
+        "TXN-100193",
+        "TXN-100190"
+      ],
+      "transaction_dates": [
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04",
+        "2026-05-04"
+      ],
+      "amounts": [
+        255.53,
+        378.3,
+        326.93,
+        364.25,
+        223.97,
+        180.12,
+        136.43,
+        328.0,
+        193.23,
+        265.68,
+        167.41,
+        339.79
+      ],
+      "merchant_categories": [
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm",
+        "atm"
+      ],
+      "evidence_summary": "12 ATM withdrawals on 2026-05-04 totalling $3,160",
+      "raw_data": {
+        "date": "2026-05-04",
+        "withdrawal_count": 12,
+        "total_amount": 3159.64
+      },
+      "ai_rationale": "The high frequency of ATM withdrawals by David Chen on a single day raises concerns about potential money laundering or structuring activities, as it may indicate an attempt to avoid reporting thresholds. This behavior is unusual and warrants further review to determine if it is legitimate or suspicious. The total amount withdrawn, $3,160, is substantial and contributes to the suspicion.",
+      "recommended_action": "Review David Chen's account history and transaction patterns to identify any other unusual activities or connections to high-risk individuals or entities.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 48,
+      "priority_rank": 14
+    },
+    {
+      "finding_id": "FIND-008",
+      "customer_id": "CUST-1004",
+      "customer_name": "Priya Nair",
+      "signal_type": "dormant_reactivation",
+      "severity": "MEDIUM",
+      "transaction_ids": [
+        "TXN-100194"
+      ],
+      "transaction_dates": [
+        "2026-05-10"
+      ],
+      "amounts": [
+        21921.72
+      ],
+      "merchant_categories": [
+        "wire_transfer"
+      ],
+      "evidence_summary": "No account activity for first 65 days of review period \u2014 then $21,922 transaction detected",
+      "raw_data": {
+        "dormant_days": 65,
+        "reactivation_amount": 21921.72
+      },
+      "ai_rationale": "The reactivation of a dormant account with a large transaction raises concerns about potential money laundering or suspicious activity, as it may indicate an attempt to move illicit funds. The significant amount of $21,922 in a single wire transfer transaction is unusual and warrants further review. This activity may be legitimate, but its unusual nature necessitates a closer examination.",
+      "recommended_action": "Request additional customer information and transaction history from Priya Nair to understand the purpose and origin of the $21,922 wire transfer.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 45,
+      "priority_rank": 15
+    },
+    {
+      "finding_id": "FIND-013",
+      "customer_id": "CUST-1008",
+      "customer_name": "Elena Petrov",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100238"
+      ],
+      "transaction_dates": [
+        "2026-03-09"
+      ],
+      "amounts": [
+        706.96
+      ],
+      "merchant_categories": [
+        "atm"
+      ],
+      "evidence_summary": "$707 debit left account balance at $-14,478.29",
+      "raw_data": {
+        "balance_after": -14478.29,
+        "transaction_amount": 706.96
+      },
+      "ai_rationale": "The negative balance risk associated with Elena Petrov's account is a concern as it indicates a potential overdraft or unauthorized transaction, which may suggest fraudulent activity or a misunderstanding of account terms. The significant debit amount and resulting negative balance warrant further investigation to determine the cause and ensure the customer's account is handled appropriately. This situation may require communication with the customer to clarify the transaction and assess any potential risk to the institution.",
+      "recommended_action": "Review Elena Petrov's account history and transaction details to determine the cause of the negative balance and assess for any other suspicious activity.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 16
+    },
+    {
+      "finding_id": "FIND-015",
+      "customer_id": "CUST-1002",
+      "customer_name": "Maria Santos",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100176"
+      ],
+      "transaction_dates": [
+        "2026-03-19"
+      ],
+      "amounts": [
+        2644.33
+      ],
+      "merchant_categories": [
+        "retail"
+      ],
+      "evidence_summary": "$2,644 debit left account balance at $-33,313.63",
+      "raw_data": {
+        "balance_after": -33313.63,
+        "transaction_amount": 2644.33
+      },
+      "ai_rationale": "The negative balance risk associated with Maria Santos' account is a concern as it indicates a potential overdraft or unauthorized transaction, which may be a sign of fraudulent activity or account takeover. The significant debit amount and resulting negative balance suggest a possible lapse in account monitoring or suspicious transaction patterns. This discrepancy warrants further review to determine the legitimacy of the transaction and the overall account activity.",
+      "recommended_action": "Verify the transaction details with Maria Santos and obtain confirmation on the authenticity of the $2,644 debit to determine if it was a legitimate or unauthorized transaction.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 17
+    },
+    {
+      "finding_id": "FIND-022",
+      "customer_id": "CUST-1005",
+      "customer_name": "Robert Mwangi",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100211"
+      ],
+      "transaction_dates": [
+        "2026-04-09"
+      ],
+      "amounts": [
+        6923.3
+      ],
+      "merchant_categories": [
+        "crypto"
+      ],
+      "evidence_summary": "$6,923 debit left account balance at $-24,661.49",
+      "raw_data": {
+        "balance_after": -24661.49,
+        "transaction_amount": 6923.3
+      },
+      "ai_rationale": "The negative balance risk associated with Robert Mwangi's account is a concern as it indicates a potential overdraft or unauthorized transaction, which may be linked to fraudulent activity, especially given the involvement of a crypto merchant category. The significant debit of $6,923 leading to a negative balance of $24,661.49 suggests a possible misuse of funds or an error in transaction processing. This discrepancy warrants further investigation to determine the legitimacy of the transaction and the customer's account activity.",
+      "recommended_action": "Review Robert Mwangi's account history and transaction records to identify any other suspicious activities or similar patterns of behavior.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 18
+    },
+    {
+      "finding_id": "FIND-026",
+      "customer_id": "CUST-1007",
+      "customer_name": "Ahmed Hassan",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100232"
+      ],
+      "transaction_dates": [
+        "2026-04-15"
+      ],
+      "amounts": [
+        3320.6
+      ],
+      "merchant_categories": [
+        "crypto"
+      ],
+      "evidence_summary": "$3,321 debit left account balance at $-8,564.85",
+      "raw_data": {
+        "balance_after": -8564.85,
+        "transaction_amount": 3320.6
+      },
+      "ai_rationale": "The negative balance risk associated with Ahmed Hassan's account is a concern as it indicates a potential overdraft or unauthorized transaction, which may be linked to fraudulent activity, especially given the involvement of a crypto merchant category. This could lead to financial losses for the customer and reputational damage for the institution. The severity of this risk should be reevaluated given the significant overdraft amount.",
+      "recommended_action": "Investigate the transaction with the crypto merchant to determine if it was authorized by Ahmed Hassan and assess if additional controls are needed to prevent similar overdrafts.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 19
+    },
+    {
+      "finding_id": "FIND-027",
+      "customer_id": "CUST-1006",
+      "customer_name": "Lisa Kowalski",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100229"
+      ],
+      "transaction_dates": [
+        "2026-04-18"
+      ],
+      "amounts": [
+        3304.67
+      ],
+      "merchant_categories": [
+        "gambling"
+      ],
+      "evidence_summary": "$3,305 debit left account balance at $-2,925.67",
+      "raw_data": {
+        "balance_after": -2925.67,
+        "transaction_amount": 3304.67
+      },
+      "ai_rationale": "The negative balance risk associated with Lisa Kowalski's account is a concern as it indicates a potential overdraft situation, which may be a sign of financial distress or reckless spending, particularly given the transaction is categorized as gambling. This could suggest a vulnerability to financial exploitation or problem gambling. The severity of this risk may be underestimated given the significant debit amount and resulting negative balance.",
+      "recommended_action": "Review Lisa Kowalski's account history and transaction patterns to determine if this is an isolated incident or part of a larger trend of risky financial behavior.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 20
+    },
+    {
+      "finding_id": "FIND-030",
+      "customer_id": "CUST-1001",
+      "customer_name": "James Okafor",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100162"
+      ],
+      "transaction_dates": [
+        "2026-05-08"
+      ],
+      "amounts": [
+        9069.09
+      ],
+      "merchant_categories": [
+        "atm"
+      ],
+      "evidence_summary": "$9,069 debit left account balance at $-2,206.48",
+      "raw_data": {
+        "balance_after": -2206.48,
+        "transaction_amount": 9069.09
+      },
+      "ai_rationale": "The negative balance risk associated with James Okafor's account is a concern as it indicates a potential overdraft or unauthorized transaction, which may be a sign of fraudulent activity or account takeover. The significant debit of $9,069, resulting in an account balance of -$2,206.48, warrants further investigation to determine the legitimacy of the transaction. This discrepancy may also suggest a failure in the bank's overdraft protection policies or procedures.",
+      "recommended_action": "Review James Okafor's account activity and transaction history to verify the authenticity of the $9,069 debit and determine if it was authorized.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 21
+    },
+    {
+      "finding_id": "FIND-031",
+      "customer_id": "CUST-1003",
+      "customer_name": "David Chen",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100222"
+      ],
+      "transaction_dates": [
+        "2026-05-08"
+      ],
+      "amounts": [
+        8788.95
+      ],
+      "merchant_categories": [
+        "atm"
+      ],
+      "evidence_summary": "$8,789 debit left account balance at $-4,623.73",
+      "raw_data": {
+        "balance_after": -4623.73,
+        "transaction_amount": 8788.95
+      },
+      "ai_rationale": "The negative balance risk associated with David Chen's account is a compliance concern because it may indicate overdraft or potential fraud, which could lead to financial losses for the institution. The significant debit amount and resulting negative balance suggest a potential issue that requires review. This situation may also impact the customer's credit score and relationship with the bank.",
+      "recommended_action": "Review David Chen's account history and recent transactions to determine the cause of the negative balance and assess for any potential suspicious activity.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 22
+    },
+    {
+      "finding_id": "FIND-034",
+      "customer_id": "CUST-1004",
+      "customer_name": "Priya Nair",
+      "signal_type": "negative_balance_risk",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100226"
+      ],
+      "transaction_dates": [
+        "2026-05-10"
+      ],
+      "amounts": [
+        7334.66
+      ],
+      "merchant_categories": [
+        "atm"
+      ],
+      "evidence_summary": "$7,335 debit left account balance at $-26,346.71",
+      "raw_data": {
+        "balance_after": -26346.71,
+        "transaction_amount": 7334.66
+      },
+      "ai_rationale": "The negative balance risk associated with Priya Nair's account is a concern as it indicates a potential overdraft or unauthorized transaction, which may suggest fraudulent activity or a misunderstanding of account terms. The significant debit of $7,335 leaving an account balance of -$26,346.71 warrants further investigation to determine the cause and potential impact on the customer and the institution. This situation may require immediate attention to prevent further financial losses or reputational damage.",
+      "recommended_action": "Contact Priya Nair to verify the transaction and assess her awareness of the account balance and any potential fraud.",
+      "analyst_priority": "URGENT",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 22,
+      "priority_rank": 23
+    },
+    {
+      "finding_id": "FIND-059",
+      "customer_id": "CUST-1002",
+      "customer_name": "Maria Santos",
+      "signal_type": "statistical_outlier",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100176"
+      ],
+      "transaction_dates": [
+        "2026-03-19"
+      ],
+      "amounts": [
+        2644.33
+      ],
+      "merchant_categories": [
+        "retail"
+      ],
+      "evidence_summary": "$2,644 is 4.7 standard deviations above the mean for retail transactions",
+      "raw_data": {
+        "zscore": 4.66,
+        "merchant_category": "retail"
+      },
+      "ai_rationale": "The transaction of $2,644 is unusually high compared to typical retail transactions, suggesting a potential misuse of funds or an error in payment processing. This outlier may indicate a one-time anomaly or a more serious issue, such as money laundering or fraudulent activity. The low severity rating may underestimate the potential risk associated with this transaction.",
+      "recommended_action": "Review Maria Santos' account history and transaction patterns to determine if this outlier is an isolated incident or part of a larger trend.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 17,
+      "priority_rank": 24
+    },
+    {
+      "finding_id": "FIND-061",
+      "customer_id": "CUST-1004",
+      "customer_name": "Priya Nair",
+      "signal_type": "statistical_outlier",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100181"
+      ],
+      "transaction_dates": [
+        "2026-05-10"
+      ],
+      "amounts": [
+        2144.15
+      ],
+      "merchant_categories": [
+        "retail"
+      ],
+      "evidence_summary": "$2,144 is 3.7 standard deviations above the mean for retail transactions",
+      "raw_data": {
+        "zscore": 3.66,
+        "merchant_category": "retail"
+      },
+      "ai_rationale": "The transaction of $2,144 is unusually high compared to typical retail transactions, suggesting a potential misuse of funds or an error in payment processing. This outlier may indicate a one-time anomaly or a more serious issue, such as money laundering or fraudulent activity. The low severity rating may underestimate the potential risk associated with this transaction.",
+      "recommended_action": "Review Priya Nair's account history and transaction patterns to determine if this outlier is an isolated incident or part of a larger trend.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 17,
+      "priority_rank": 25
+    },
+    {
+      "finding_id": "FIND-062",
+      "customer_id": "CUST-1007",
+      "customer_name": "Ahmed Hassan",
+      "signal_type": "statistical_outlier",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100216"
+      ],
+      "transaction_dates": [
+        "2026-05-14"
+      ],
+      "amounts": [
+        2209.65
+      ],
+      "merchant_categories": [
+        "retail"
+      ],
+      "evidence_summary": "$2,210 is 3.8 standard deviations above the mean for retail transactions",
+      "raw_data": {
+        "zscore": 3.79,
+        "merchant_category": "retail"
+      },
+      "ai_rationale": "The transaction of $2,210 is unusually high compared to typical retail transactions, which may indicate a potential misuse of funds or money laundering activity. However, given the low severity and isolated incident, it's essential to gather more context before escalating. The compliance concern is whether this outlier transaction is legitimate or a one-time anomaly that requires further review.",
+      "recommended_action": "Review Ahmed Hassan's (CUST-1007) account history and transaction patterns to determine if there are any other unusual or suspicious activities.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 17,
+      "priority_rank": 26
+    },
+    {
+      "finding_id": "FIND-064",
+      "customer_id": "CUST-1008",
+      "customer_name": "Elena Petrov",
+      "signal_type": "statistical_outlier",
+      "severity": "LOW",
+      "transaction_ids": [
+        "TXN-100217"
+      ],
+      "transaction_dates": [
+        "2026-06-03"
+      ],
+      "amounts": [
+        2608.41
+      ],
+      "merchant_categories": [
+        "retail"
+      ],
+      "evidence_summary": "$2,608 is 4.6 standard deviations above the mean for retail transactions",
+      "raw_data": {
+        "zscore": 4.59,
+        "merchant_category": "retail"
+      },
+      "ai_rationale": "The transaction of $2,608 is unusually high compared to typical retail transactions, suggesting a potential misuse of funds or an error in payment processing. This outlier may indicate a need for further review to ensure the transaction is legitimate and compliant with regulatory requirements. The low severity rating may be appropriate given the single transaction, but it still warrants a closer look.",
+      "recommended_action": "Review the transaction details and customer account history to verify the legitimacy of the purchase and ensure it aligns with Elena Petrov's typical spending patterns.",
+      "analyst_priority": "REVIEW",
+      "ai_provider": "Grok (Groq / llama-3.3-70b)",
+      "risk_score": 17,
+      "priority_rank": 27
+    }
+  ]
+}
